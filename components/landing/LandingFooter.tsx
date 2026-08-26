@@ -36,8 +36,8 @@ export default function LandingFooter() {
                 <Flame size={18} className="fill-white" />
               </div>
               <div className="leading-tight">
-                <p className="text-base font-extrabold text-neutral-950">Shopify AI</p>
-                <p className="text-[10px] font-bold text-[#FF3B00]">OS 2.0 ARCHITECT</p>
+                <p className="text-base font-extrabold text-neutral-950">ShopStudio</p>
+                <p className="text-[10px] font-bold text-[#FF3B00]">OS 2.0 AI THEME BUILDER</p>
               </div>
             </Link>
             <p className="mt-4 max-w-sm text-xs leading-relaxed text-neutral-600">
@@ -110,7 +110,7 @@ export default function LandingFooter() {
 
         {/* Bottom copyright */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-neutral-200 pt-8 text-xs text-neutral-500 sm:flex-row">
-          <p>© {new Date().getFullYear()} Shopify AI Theme Builder. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} ShopStudio. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span>Shopify OS 2.0 Compliant</span>
             <span>•</span>

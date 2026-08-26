@@ -88,7 +88,7 @@ export default function LandingHero() {
 
   const liquidSnippet = `{% comment %}
   Shopify OS 2.0 Section: hero-banner.liquid
-  Generated with Antigravity AI Theme Builder
+  Generated with ShopStudio AI Theme Builder
 {% endcomment %}
 
 <section 

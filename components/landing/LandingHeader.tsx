@@ -80,12 +80,12 @@ export default function LandingHeader() {
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5 leading-none">
-              <span className="text-base font-extrabold tracking-tight text-neutral-950">Shopify AI</span>
+              <span className="text-base font-extrabold tracking-tight text-neutral-950">ShopStudio</span>
               <span className="rounded-md bg-[#FFF3EE] px-1.5 py-0.5 text-[10px] font-bold text-[#FF4500] border border-[#FFCCBC]">
                 OS 2.0
               </span>
             </div>
-            <span className="text-[10px] font-medium text-neutral-500 tracking-wide mt-0.5">THEME ARCHITECT</span>
+            <span className="text-[10px] font-medium text-neutral-500 tracking-wide mt-0.5">AI THEME BUILDER</span>
           </div>
         </Link>
 
