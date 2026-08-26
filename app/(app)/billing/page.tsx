@@ -10,6 +10,10 @@ import {
   Download,
   Info,
   Loader2,
+  Sparkles,
+  Flame,
+  ShieldCheck,
+  Zap,
   X,
 } from 'lucide-react';
 import { useAuth } from '@/components';
@@ -28,10 +32,10 @@ import {
 
 /** Pretty labels for subscription statuses. */
 const STATUS_LABEL: Record<string, string> = {
-  free: 'Free',
+  free: 'Free Tier',
   active: 'Active',
   trialing: 'Trialing',
-  past_due: 'Past due',
+  past_due: 'Past Due',
   canceled: 'Canceled',
   unpaid: 'Unpaid',
   incomplete: 'Incomplete',
@@ -70,10 +74,10 @@ export default function BillingPage() {
 
   if (authLoading || (loading && !entitlement)) {
     return (
-      <div className="grid min-h-screen place-items-center bg-[#fffdfc] text-[#6b7280]">
+      <div className="grid min-h-screen place-items-center bg-[#fffdfc] text-neutral-400">
         <div className="flex items-center gap-3 text-sm font-medium">
-          <Loader2 size={18} className="animate-spin text-[#ff6747]" />
-          Loading billing…
+          <Loader2 size={20} className="animate-spin text-[#FF3B00]" />
+          Loading billing details…
         </div>
       </div>
     );
@@ -117,63 +121,76 @@ export default function BillingPage() {
     isPaid || !maxProjects ? 100 : Math.min(100, Math.round((projectCount / maxProjects) * 100));
 
   return (
-    <div className="min-h-screen bg-[#fffdfc] px-8 py-10">
-      <div className="mx-auto max-w-[960px]">
-        <header className="mb-8">
-          <h1 className="text-[28px] font-bold leading-tight text-[#111827]">Billing &amp; plans</h1>
-          <p className="mt-1 text-sm text-[#6b7280]">
-            Manage your subscription, usage, and payment details.
+    <div className="min-h-screen bg-[#fffdfc] px-6 py-8 sm:px-10">
+      <div className="mx-auto max-w-5xl">
+        <header className="mb-8 border-b border-neutral-200/80 pb-6">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#FF3B00]">
+            <Flame size={14} className="fill-[#FF3B00]" />
+            <span>SUBSCRIPTION &amp; QUOTA</span>
+          </div>
+          <h1 className="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950">Billing &amp; Plans</h1>
+          <p className="mt-1 text-xs sm:text-sm text-neutral-600">
+            Manage your subscription, storefront quota, and payment methods.
           </p>
         </header>
 
         {banner === 'success' && (
-          <div className="mb-6 flex items-center gap-3 rounded-xl border border-[#c6ecd4] bg-[#effaf3] px-4 py-3 text-sm font-medium text-[#1f7a44]">
-            <CheckCircle2 size={18} /> Subscription active — welcome to Pro!
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-[#F0FDF4] px-4 py-3 text-xs sm:text-sm font-semibold text-emerald-800 shadow-2xs">
+            <CheckCircle2 size={18} className="text-emerald-600 shrink-0" />
+            <span>Subscription active — welcome to Pro Merchant! Enjoy unlimited themes and ZIP exports.</span>
           </div>
         )}
         {banner === 'cancelled' && (
-          <div className="mb-6 flex items-center gap-3 rounded-xl border border-[#f6e4c8] bg-[#fdf7ec] px-4 py-3 text-sm font-medium text-[#9a6a1a]">
-            <Info size={18} /> Checkout cancelled — no changes were made.
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-amber-200 bg-[#FFFBEB] px-4 py-3 text-xs sm:text-sm font-semibold text-amber-800 shadow-2xs">
+            <Info size={18} className="text-amber-600 shrink-0" />
+            <span>Checkout cancelled — no changes were made to your account.</span>
           </div>
         )}
         {error && (
-          <div className="mb-6 flex items-center gap-3 rounded-xl border border-[#f6d5cf] bg-[#fdeceb] px-4 py-3 text-sm font-medium text-[#c0432f]">
-            <AlertTriangle size={18} /> {error}
+          <div className="mb-6 flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs sm:text-sm font-semibold text-red-800 shadow-2xs">
+            <AlertTriangle size={18} className="text-red-600 shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 
         {/* Current plan summary */}
-        <section className="mb-6 rounded-2xl border border-[#eee7e3] bg-white p-6 shadow-[0_10px_24px_rgba(31,41,55,0.035)]">
+        <section className="mb-8 rounded-3xl border border-neutral-200/90 bg-white p-6 sm:p-7 shadow-xs">
           <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3.5">
               <span
-                className={`grid h-11 w-11 place-items-center rounded-xl ${
-                  isPaid ? 'bg-[#fff7ec] text-[#f59b14]' : 'bg-[#fff3ef] text-[#ff6747]'
+                className={`grid h-12 w-12 place-items-center rounded-2xl border ${
+                  isPaid
+                    ? 'bg-[#FFF8EE] text-amber-600 border-amber-200 shadow-xs'
+                    : 'bg-[#FFF3EE] text-[#FF3B00] border-[#FFCCBC]'
                 }`}
               >
-                {isPaid ? <Crown size={22} strokeWidth={1.9} /> : <CreditCard size={22} strokeWidth={1.9} />}
+                {isPaid ? <Crown size={24} strokeWidth={2} /> : <CreditCard size={24} strokeWidth={2} />}
               </span>
               <div>
-                <p className="text-lg font-bold text-[#111827]">{PLANS[plan].name} plan</p>
-                <div className="mt-1 flex items-center gap-2">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg sm:text-xl font-bold text-neutral-950">{PLANS[plan].name} Plan</h2>
                   <span
-                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
                       status === 'active' || status === 'trialing'
-                        ? 'bg-[#effaf3] text-[#1f7a44]'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                         : status === 'past_due' || status === 'unpaid'
-                          ? 'bg-[#fdeceb] text-[#c0432f]'
-                          : 'bg-[#f4f1ee] text-[#6b7280]'
+                          ? 'bg-red-50 text-red-700 border border-red-200'
+                          : 'bg-neutral-100 text-neutral-700 border border-neutral-200'
                     }`}
                   >
                     {STATUS_LABEL[status] ?? status}
                   </span>
-                  {isPaid && (
-                    <span className="text-xs text-[#6b7280]">
-                      {cancelAtPeriodEnd ? 'Cancels on ' : 'Renews on '}
-                      {formatDate(periodEnd)}
-                    </span>
-                  )}
                 </div>
+                <p className="text-xs text-neutral-500 mt-1">
+                  {isPaid ? (
+                    <span>
+                      {cancelAtPeriodEnd ? 'Cancels on ' : 'Renews on '}
+                      <strong>{formatDate(periodEnd)}</strong>
+                    </span>
+                  ) : (
+                    <span>Free starter tier includes 2 generated storefronts</span>
+                  )}
+                </p>
               </div>
             </div>
 
@@ -182,153 +199,186 @@ export default function BillingPage() {
                 <button
                   onClick={() => void run('portal', openBillingPortal)}
                   disabled={busy !== null}
-                  className="flex h-10 items-center gap-2 rounded-xl border border-[#e8e2de] bg-white px-4 text-sm font-medium text-[#111827] transition hover:bg-[#fff8f5] disabled:opacity-60"
+                  className="flex h-10 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 text-xs font-bold text-neutral-800 shadow-2xs transition hover:bg-neutral-50 disabled:opacity-60 cursor-pointer"
                 >
-                  {busy === 'portal' ? <Loader2 size={15} className="animate-spin" /> : <CreditCard size={15} />}
-                  Manage Billing
+                  {busy === 'portal' ? <Loader2 size={14} className="animate-spin text-neutral-500" /> : <CreditCard size={14} />}
+                  <span>Manage Billing (Stripe)</span>
                 </button>
               )}
               {isPaid && !cancelAtPeriodEnd && (
                 <button
                   onClick={() => void cancel()}
                   disabled={busy !== null}
-                  className="flex h-10 items-center gap-2 rounded-xl border border-[#f2d3cd] bg-white px-4 text-sm font-medium text-[#c0432f] transition hover:bg-[#fdeceb] disabled:opacity-60"
+                  className="flex h-10 items-center gap-1.5 rounded-xl border border-red-200 bg-white px-3.5 text-xs font-semibold text-red-600 transition hover:bg-red-50 disabled:opacity-60 cursor-pointer"
                 >
-                  {busy === 'cancel' ? <Loader2 size={15} className="animate-spin" /> : <X size={15} />}
-                  Cancel subscription
+                  {busy === 'cancel' ? <Loader2 size={14} className="animate-spin" /> : <X size={14} />}
+                  <span>Cancel subscription</span>
                 </button>
               )}
               {isPaid && cancelAtPeriodEnd && (
                 <button
                   onClick={() => void resume()}
                   disabled={busy !== null}
-                  className="flex h-10 items-center gap-2 rounded-xl bg-[#ff6747] px-4 text-sm font-semibold text-white transition hover:bg-[#f85b3a] disabled:opacity-60"
+                  className="flex h-10 items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF3B00] to-[#FF6200] px-4 text-xs font-bold text-white shadow-xs transition hover:brightness-105 disabled:opacity-60 cursor-pointer"
                 >
-                  {busy === 'resume' ? <Loader2 size={15} className="animate-spin" /> : <Check size={15} />}
-                  Resume subscription
+                  {busy === 'resume' ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
+                  <span>Resume subscription</span>
                 </button>
               )}
             </div>
           </div>
 
           {cancelAtPeriodEnd && (
-            <p className="mt-4 rounded-xl border border-[#f6e4c8] bg-[#fdf7ec] px-4 py-3 text-sm text-[#9a6a1a]">
-              Your subscription is set to cancel on {formatDate(periodEnd)}. You’ll keep Pro access until then.
+            <p className="mt-4 rounded-2xl border border-amber-200 bg-[#FFFBEB] p-3.5 text-xs text-amber-800 font-medium">
+              Your subscription is scheduled to cancel on {formatDate(periodEnd)}. You will keep full Pro Merchant access until that date.
             </p>
           )}
         </section>
 
-        {/* Usage */}
-        <section id="usage" className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <div className="rounded-2xl border border-[#eee7e3] bg-white p-6 shadow-[0_10px_24px_rgba(31,41,55,0.035)]">
-            <p className="text-sm font-semibold text-[#111827]">Project usage</p>
-            <p className="mt-1 text-2xl font-bold text-[#111827]">
+        {/* Usage & Entitlements Overview */}
+        <section id="usage" className="mb-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="rounded-3xl border border-neutral-200/90 bg-white p-6 shadow-xs">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Storefront Quota</span>
+              <span className="grid h-8 w-8 place-items-center rounded-xl bg-[#FFF3EE] text-[#FF3B00] border border-[#FFCCBC]">
+                <Zap size={16} />
+              </span>
+            </div>
+            <p className="mt-2 text-3xl font-black text-neutral-950">
               {projectCount}
-              <span className="text-base font-medium text-[#9aa2af]">
+              <span className="text-base font-semibold text-neutral-400">
                 {' '}/ {isPaid ? '∞' : maxProjects}
               </span>
             </p>
-            <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-[#f0eae6]">
+            <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-neutral-100">
               <div
-                className="h-full rounded-full bg-[#ff6747] transition-all"
+                className="h-full rounded-full bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] transition-all duration-300"
                 style={{ width: `${usagePct}%` }}
               />
             </div>
-            <p className="mt-2 text-xs text-[#6b7280]">
-              {isPaid ? 'Unlimited projects on your plan.' : `${Math.max(0, maxProjects - projectCount)} remaining on Free.`}
+            <p className="mt-2.5 text-xs text-neutral-500 font-medium">
+              {isPaid ? 'Unlimited themes & AI generations on Pro.' : `${Math.max(0, maxProjects - projectCount)} storefront slot${Math.max(0, maxProjects - projectCount) === 1 ? '' : 's'} remaining.`}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[#eee7e3] bg-white p-6 shadow-[0_10px_24px_rgba(31,41,55,0.035)]">
-            <p className="text-sm font-semibold text-[#111827]">Shopify export</p>
-            <div className="mt-3 flex items-center gap-2">
+          <div className="rounded-3xl border border-neutral-200/90 bg-white p-6 shadow-xs">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">Shopify OS 2.0 Export</span>
               <span
-                className={`grid h-9 w-9 place-items-center rounded-xl ${
-                  entitlement?.canExport ? 'bg-[#effaf3] text-[#1f7a44]' : 'bg-[#f4f1ee] text-[#9aa2af]'
+                className={`grid h-8 w-8 place-items-center rounded-xl border ${
+                  entitlement?.canExport ? 'bg-[#EFF6FF] text-[#3B82F6] border-[#BFDBFE]' : 'bg-neutral-100 text-neutral-400 border-neutral-200'
                 }`}
               >
-                <Download size={18} strokeWidth={1.9} />
+                <Download size={16} strokeWidth={2} />
               </span>
-              <p className="text-sm font-medium text-[#111827]">
-                {entitlement?.canExport ? 'Enabled' : 'Disabled on Free'}
-              </p>
             </div>
-            <p className="mt-3 text-xs text-[#6b7280]">
+            <div className="mt-2 flex items-center gap-2">
+              <span className="text-xl font-bold text-neutral-950">
+                {entitlement?.canExport ? '1-Click ZIP Enabled' : 'Disabled on Free Tier'}
+              </span>
+            </div>
+            <p className="mt-2.5 text-xs text-neutral-500 font-medium">
               {entitlement?.canExport
-                ? 'Export any project as a Shopify theme ZIP.'
-                : 'Upgrade to export projects as Shopify theme ZIP files.'}
+                ? 'Export any storefront as a 100% compliant Shopify theme ZIP archive.'
+                : 'Upgrade to Pro Merchant to export and upload themes directly to Shopify Admin.'}
             </p>
           </div>
         </section>
 
-        {/* Pricing / plan switching */}
-        <section>
-          <h2 className="mb-4 text-lg font-bold text-[#111827]">Plans</h2>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        {/* Pricing / Plan Switching Grid matching LandingPricing.tsx */}
+        <section className="mb-10">
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 className="text-xl font-bold text-neutral-950">Available Plans</h2>
+              <p className="text-xs text-neutral-500">Pick the right plan for your e-commerce storefront goals.</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 items-stretch">
             {(['free', 'monthly', 'yearly'] as PlanId[]).map((id) => {
               const p = PLANS[id];
               const isCurrent = plan === id;
               const isPaidPlan = id !== 'free';
+              const isYearly = id === 'yearly';
+
               return (
                 <div
                   key={id}
-                  className={`flex flex-col rounded-2xl border bg-white p-5 shadow-[0_10px_24px_rgba(31,41,55,0.035)] ${
-                    isCurrent ? 'border-[#ff6747] ring-1 ring-[#ffd4c7]' : 'border-[#eee7e3]'
+                  className={`relative flex flex-col justify-between rounded-3xl p-6 transition-all duration-200 ${
+                    isYearly
+                      ? 'border-2 border-[#FF3B00] bg-white shadow-[0_8px_30px_rgba(255,59,0,0.12)]'
+                      : isCurrent
+                        ? 'border-2 border-neutral-950 bg-white shadow-md'
+                        : 'border border-neutral-200/90 bg-white shadow-xs hover:border-neutral-300'
                   }`}
                 >
-                  <div className="mb-3 flex items-center justify-between">
-                    <p className="text-sm font-semibold text-[#111827]">{p.name}</p>
-                    {isCurrent && (
-                      <span className="rounded-full bg-[#fff3ef] px-2.5 py-0.5 text-xs font-semibold text-[#ff6747]">
-                        Current
+                  {isYearly && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] px-3 py-0.5 text-[11px] font-black text-white shadow-xs">
+                        <Crown size={11} /> MOST POPULAR (SAVE 17%)
                       </span>
-                    )}
+                    </div>
+                  )}
+
+                  <div>
+                    <div className="mb-3 flex items-center justify-between">
+                      <h3 className="text-base font-bold text-neutral-950">{p.name}</h3>
+                      {isCurrent && (
+                        <span className="rounded-full bg-[#FFF3EE] px-2.5 py-0.5 text-[11px] font-bold text-[#FF3B00] border border-[#FFCCBC]">
+                          Current Plan
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="flex items-baseline gap-1">
+                      <span className="text-3xl font-extrabold text-neutral-950">
+                        {formatPrice(p.amount, p.currency)}
+                      </span>
+                      {p.interval && <span className="text-xs font-semibold text-neutral-500">/{p.interval}</span>}
+                    </p>
+                    <p className="mt-1 text-xs text-neutral-500 font-medium">{p.tagline}</p>
+
+                    <ul className="my-5 space-y-2.5 border-t border-neutral-100 pt-4">
+                      {p.features.map((f) => (
+                        <li key={f} className="flex items-start gap-2 text-xs text-neutral-700 font-medium">
+                          <Check size={15} strokeWidth={2.4} className={`mt-0.5 shrink-0 ${isPaidPlan ? 'text-[#FF3B00]' : 'text-[#10B981]'}`} />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <p className="flex items-baseline gap-1">
-                    <span className="text-2xl font-bold text-[#111827]">
-                      {formatPrice(p.amount, p.currency)}
-                    </span>
-                    {p.interval && <span className="text-sm text-[#6b7280]">/{p.interval}</span>}
-                  </p>
-                  <p className="mt-0.5 text-xs text-[#9aa2af]">{p.tagline}</p>
-                  <ul className="my-4 space-y-2">
-                    {p.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-[13px] text-[#4b5563]">
-                        <Check size={15} strokeWidth={2.4} className="mt-0.5 shrink-0 text-[#35b86b]" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-auto">
+
+                  <div className="mt-4 pt-2">
                     {isCurrent ? (
                       <button
                         disabled
-                        className="h-10 w-full rounded-xl border border-[#e8e2de] bg-[#faf7f5] text-sm font-medium text-[#9aa2af]"
+                        className="h-11 w-full rounded-2xl border border-neutral-200 bg-neutral-100 text-xs font-bold text-neutral-400 cursor-not-allowed"
                       >
-                        Current plan
+                        Current Plan
                       </button>
                     ) : isPaidPlan ? (
                       <button
                         onClick={() => void run(`checkout-${id}`, () => startCheckout(id as 'monthly' | 'yearly'))}
                         disabled={busy !== null}
-                        className="flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#ff6747] text-sm font-semibold text-white transition hover:bg-[#f85b3a] disabled:opacity-60"
+                        className="flex h-11 w-full items-center justify-center gap-1.5 rounded-2xl bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] text-xs font-bold text-white shadow-[0_2px_12px_rgba(255,59,0,0.3)] transition-all hover:brightness-105 hover:shadow-[0_4px_16px_rgba(255,59,0,0.4)] disabled:opacity-60 cursor-pointer"
                       >
                         {busy === `checkout-${id}` ? (
                           <Loader2 size={15} className="animate-spin" />
-                        ) : isPaid ? (
-                          'Switch plan'
                         ) : (
-                          'Upgrade'
+                          <>
+                            <Sparkles size={14} />
+                            <span>{isPaid ? 'Switch to ' + p.name : 'Upgrade to ' + p.name}</span>
+                          </>
                         )}
                       </button>
                     ) : (
                       <button
                         onClick={() => void run('portal', openBillingPortal)}
                         disabled={busy !== null || !isPaid}
-                        className="h-10 w-full rounded-xl border border-[#e8e2de] bg-white text-sm font-medium text-[#111827] transition hover:bg-[#fff8f5] disabled:opacity-50"
-                        title={isPaid ? 'Cancel your paid plan to return to Free' : ''}
+                        className="h-11 w-full rounded-2xl border border-neutral-200 bg-white text-xs font-bold text-neutral-800 transition hover:bg-neutral-50 disabled:opacity-50 cursor-pointer"
+                        title={isPaid ? 'Manage billing via Stripe portal' : ''}
                       >
-                        {isPaid ? 'Downgrade' : 'Included'}
+                        {isPaid ? 'Downgrade via Portal' : 'Starter Included'}
                       </button>
                     )}
                   </div>
@@ -337,7 +387,21 @@ export default function BillingPage() {
             })}
           </div>
         </section>
+
+        {/* Guarantees Row */}
+        <section className="flex flex-wrap items-center justify-center gap-6 text-xs text-neutral-500 border-t border-neutral-100 pt-8 pb-4">
+          <span className="flex items-center gap-1.5 font-medium">
+            <ShieldCheck size={16} className="text-[#10B981]" /> 14-Day Money-Back Guarantee
+          </span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <Check size={16} className="text-[#10B981]" /> Cancel anytime with 1 click
+          </span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <Check size={16} className="text-[#10B981]" /> Full Shopify OS 2.0 Export Rights
+          </span>
+        </section>
       </div>
     </div>
   );
 }
+

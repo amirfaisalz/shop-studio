@@ -24,17 +24,17 @@ export default function Input({
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <label className="text-xs font-bold uppercase tracking-wider text-[#0F1724]">
+        <label className="text-xs font-bold uppercase tracking-wider text-neutral-800">
           {label}
         </label>
       )}
       <div className="relative">
         <input
           type={effectiveType}
-          className={`h-11 w-full rounded-xl border bg-neutral-50/60 px-4 py-2 text-sm text-[#0F1724] transition-all placeholder:text-neutral-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF5840]/30 disabled:bg-neutral-100 disabled:text-neutral-400 ${
+          className={`h-11 w-full rounded-xl border bg-white px-4 py-2 text-sm text-neutral-950 transition-all placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#FF4500]/30 disabled:bg-neutral-100 disabled:text-neutral-400 ${
             error
-              ? 'border-error text-error focus:border-error focus:ring-error/20'
-              : 'border-[#e2dcda] hover:border-[#FF5840]/50 focus:border-[#FF5840]'
+              ? 'border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500/20'
+              : 'border-neutral-200 hover:border-[#FF5722]/50 focus:border-[#FF3B00]'
           } ${isPassword ? 'pr-11' : ''} ${className}`}
           {...props}
         />
@@ -50,10 +50,11 @@ export default function Input({
         )}
       </div>
       {helperText && (
-        <span className={`text-xs ${error ? 'text-error font-medium' : 'text-neutral-500'}`}>
+        <span className={`text-xs ${error ? 'text-red-600 font-medium' : 'text-neutral-500'}`}>
           {helperText}
         </span>
       )}
     </div>
   );
 }
+

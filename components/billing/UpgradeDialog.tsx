@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, Loader2, Sparkles, X } from 'lucide-react';
+import { Check, Crown, Loader2, Sparkles, X, Flame } from 'lucide-react';
 import { PAID_PLANS, formatPrice } from '@/lib/billing/plans';
 import { startCheckout } from '@/lib/billing/client';
 
 /**
  * Reusable upgrade modal shown when a Free user hits the project limit or tries
  * to export. Presents the Monthly and Yearly plans and starts Stripe Checkout
- * for the chosen one. Purely presentational beyond the checkout call.
+ * for the chosen one.
  */
 interface UpgradeDialogProps {
   open: boolean;
@@ -20,8 +20,8 @@ interface UpgradeDialogProps {
 export default function UpgradeDialog({
   open,
   onClose,
-  title = 'Upgrade to unlock more',
-  description = 'You’re on the Free plan. Upgrade to create unlimited projects and export Shopify themes.',
+  title = 'Upgrade to Pro Merchant',
+  description = 'You’re on the Free plan. Upgrade to create unlimited storefronts and download theme ZIP packages.',
 }: UpgradeDialogProps) {
   const [busy, setBusy] = useState<null | 'monthly' | 'yearly'>(null);
   const [error, setError] = useState('');
@@ -34,7 +34,6 @@ export default function UpgradeDialog({
     setBusy(plan);
     try {
       await startCheckout(plan);
-      // On success the browser navigates to Stripe; nothing else to do.
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not start checkout.');
       setBusy(null);
@@ -43,22 +42,22 @@ export default function UpgradeDialog({
 
   return (
     <div
-      className="fixed inset-0 z-[100] grid place-items-center bg-black/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] grid place-items-center bg-neutral-950/60 p-4 backdrop-blur-sm animate-in fade-in-50 duration-200"
       role="dialog"
       aria-modal="true"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget && !busy) onClose();
       }}
     >
-      <div className="w-full max-w-[560px] overflow-hidden rounded-2xl border border-[#eee7e3] bg-white shadow-[0_32px_64px_rgba(31,41,55,0.24)]">
-        <div className="flex items-start justify-between gap-4 border-b border-[#f1ebe7] px-6 py-5">
+      <div className="w-full max-w-[620px] overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-[0_32px_72px_rgba(0,0,0,0.2)] animate-in zoom-in-95 duration-150">
+        <div className="flex items-start justify-between gap-4 border-b border-neutral-100 px-6 py-5">
           <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-full bg-[#fff3ef] text-[#ff6747]">
-              <Sparkles size={20} fill="currentColor" strokeWidth={1.5} />
-            </span>
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] text-white shadow-[0_2px_12px_rgba(255,59,0,0.35)]">
+              <Flame size={22} className="fill-white" />
+            </div>
             <div>
-              <h2 className="text-base font-bold text-[#111827]">{title}</h2>
-              <p className="mt-0.5 text-sm text-[#6b7280]">{description}</p>
+              <h2 className="text-base sm:text-lg font-bold text-neutral-950">{title}</h2>
+              <p className="mt-0.5 text-xs sm:text-sm text-neutral-600">{description}</p>
             </div>
           </div>
           <button
@@ -66,54 +65,74 @@ export default function UpgradeDialog({
             aria-label="Close"
             onClick={onClose}
             disabled={busy !== null}
-            className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-[#9aa2af] transition hover:bg-[#f6f2ef] hover:text-[#111827] disabled:opacity-40"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-xl text-neutral-400 transition hover:bg-neutral-100 hover:text-neutral-950 disabled:opacity-40 cursor-pointer"
           >
             <X size={18} strokeWidth={2} />
           </button>
         </div>
 
         <div className="grid grid-cols-1 gap-4 p-6 sm:grid-cols-2">
-          {PAID_PLANS.map((plan) => (
-            <div
-              key={plan.id}
-              className="flex flex-col rounded-2xl border border-[#eee7e3] bg-[#fffdfc] p-5"
-            >
-              <div className="mb-3">
-                <p className="text-sm font-semibold text-[#111827]">{plan.name}</p>
-                <p className="mt-1 flex items-baseline gap-1">
-                  <span className="text-2xl font-bold text-[#111827]">
-                    {formatPrice(plan.amount, plan.currency)}
-                  </span>
-                  <span className="text-sm text-[#6b7280]">/{plan.interval}</span>
-                </p>
-                <p className="mt-0.5 text-xs text-[#9aa2af]">{plan.tagline}</p>
-              </div>
-              <ul className="mb-5 space-y-2">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2 text-[13px] text-[#4b5563]">
-                    <Check size={15} strokeWidth={2.4} className="mt-0.5 shrink-0 text-[#35b86b]" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <button
-                type="button"
-                onClick={() => void choose(plan.id as 'monthly' | 'yearly')}
-                disabled={busy !== null}
-                className="mt-auto flex h-11 items-center justify-center gap-2 rounded-xl bg-[#ff6747] text-sm font-semibold text-white shadow-[0_12px_22px_rgba(255,103,71,0.2)] transition hover:bg-[#f85b3a] disabled:cursor-not-allowed disabled:opacity-60"
+          {PAID_PLANS.map((plan) => {
+            const isYearly = plan.id === 'yearly';
+            return (
+              <div
+                key={plan.id}
+                className={`relative flex flex-col rounded-2xl p-5 transition-all ${
+                  isYearly
+                    ? 'border-2 border-[#FF3B00] bg-gradient-to-b from-[#FFFDFB] to-[#FFF8F5] shadow-xs'
+                    : 'border border-neutral-200/90 bg-neutral-50/50'
+                }`}
               >
-                {busy === plan.id ? (
-                  <Loader2 size={16} className="animate-spin" />
-                ) : (
-                  `Choose ${plan.name}`
+                {isYearly && (
+                  <div className="absolute -top-3 right-4">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-[#FF3B00] to-[#FF6200] px-2.5 py-0.5 text-[10px] font-black text-white shadow-xs">
+                      <Crown size={10} /> SAVE 17%
+                    </span>
+                  </div>
                 )}
-              </button>
-            </div>
-          ))}
+
+                <div className="mb-3">
+                  <p className="text-sm font-bold text-neutral-950">{plan.name}</p>
+                  <p className="mt-1 flex items-baseline gap-1">
+                    <span className="text-2xl font-black text-neutral-950">
+                      {formatPrice(plan.amount, plan.currency)}
+                    </span>
+                    <span className="text-xs text-neutral-500 font-semibold">/{plan.interval}</span>
+                  </p>
+                  <p className="mt-0.5 text-[11px] text-neutral-500 font-medium">{plan.tagline}</p>
+                </div>
+
+                <ul className="mb-5 space-y-2 border-t border-neutral-200/60 pt-3">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2 text-xs text-neutral-700 font-medium">
+                      <Check size={14} strokeWidth={2.4} className="mt-0.5 shrink-0 text-[#FF3B00]" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  type="button"
+                  onClick={() => void choose(plan.id as 'monthly' | 'yearly')}
+                  disabled={busy !== null}
+                  className="mt-auto flex h-10 w-full items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] text-xs font-bold text-white shadow-[0_2px_12px_rgba(255,59,0,0.25)] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+                >
+                  {busy === plan.id ? (
+                    <Loader2 size={15} className="animate-spin" />
+                  ) : (
+                    <>
+                      <Sparkles size={13} />
+                      <span>Choose {plan.name}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            );
+          })}
         </div>
 
         {error && (
-          <p className="px-6 pb-5 text-center text-sm font-medium text-[#ef4444]">{error}</p>
+          <p className="px-6 pb-5 text-center text-xs font-semibold text-red-600">{error}</p>
         )}
       </div>
     </div>

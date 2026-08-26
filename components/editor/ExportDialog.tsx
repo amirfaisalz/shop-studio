@@ -162,7 +162,7 @@ export default function ExportDialog({
 
   return (
     <div
-      className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-xs animate-in fade-in duration-150"
       onMouseDown={handleBackdrop}
     >
       <div className="flex min-h-full items-center justify-center p-4">
@@ -170,18 +170,18 @@ export default function ExportDialog({
           role="dialog"
           aria-modal="true"
           aria-label="Export to Shopify"
-          className="flex max-h-[min(720px,calc(100vh-2rem))] w-[min(42rem,calc(100vw-2rem))] min-w-[320px] flex-col overflow-hidden rounded-2xl border border-[#eee7e3] bg-white shadow-[0_32px_64px_rgba(31,41,55,0.24)]"
+          className="flex max-h-[min(720px,calc(100vh-2rem))] w-[min(42rem,calc(100vw-2rem))] min-w-[320px] flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-[0_32px_64px_rgba(0,0,0,0.22)]"
           onMouseDown={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex shrink-0 items-center justify-between border-b border-[#f1ebe7] px-5 py-4">
-            <div className="flex items-center gap-2.5">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#eafaf0]">
-                <Store size={18} strokeWidth={2} className="text-[#35b86b]" />
+          <div className="flex shrink-0 items-center justify-between border-b border-neutral-100 px-6 py-4">
+            <div className="flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-[#FFF3EE] text-[#FF3B00] border border-[#FFCCBC]">
+                <Store size={18} strokeWidth={2.2} />
               </span>
               <div className="min-w-0">
-                <h2 className="text-sm font-bold text-[#111827]">Export to Shopify</h2>
-                <p className="truncate text-[11px] text-[#9aa2af]">
+                <h2 className="text-sm font-extrabold text-neutral-950">Export to Shopify OS 2.0</h2>
+                <p className="truncate text-xs text-neutral-500 font-medium">
                   {projectName || 'Storefront theme'}
                 </p>
               </div>
@@ -190,56 +190,56 @@ export default function ExportDialog({
               <button
                 onClick={onClose}
                 aria-label="Close"
-                className="grid h-8 w-8 place-items-center rounded-lg text-[#9aa2af] transition hover:bg-[#f6f1ee] hover:text-[#4b5563]"
+                className="grid h-8 w-8 place-items-center rounded-xl text-neutral-400 transition hover:bg-neutral-100 hover:text-neutral-700 cursor-pointer"
               >
-                <X size={17} strokeWidth={2} />
+                <X size={16} strokeWidth={2} />
               </button>
             )}
           </div>
 
-          <div className="min-h-0 overflow-y-auto px-5 py-5">
+          <div className="min-h-0 overflow-y-auto px-6 py-5">
             {state === 'checking' && (
-              <div className="flex items-center gap-3 py-6 text-sm text-[#4b5563]">
-                <Loader2 size={18} className="animate-spin text-[#ff6747]" />
-                Checking for an existing export…
+              <div className="flex items-center gap-3 py-6 text-xs font-semibold text-neutral-600">
+                <Loader2 size={18} className="animate-spin text-[#FF3B00]" />
+                Checking for existing theme packages…
               </div>
             )}
 
             {state === 'existing' && existing && (
               <div>
-                <p className="text-sm text-[#4b5563]">
-                  A Shopify export already exists for this project.
+                <p className="text-xs text-neutral-600 font-medium">
+                  A Shopify Online Store 2.0 export already exists for this storefront project.
                 </p>
-                <div className="mt-3 flex items-center gap-3 rounded-xl border border-[#eee7e3] bg-[#faf7f5] px-3.5 py-3">
-                  <FileArchive size={20} className="shrink-0 text-[#6b7280]" />
+                <div className="mt-3.5 flex items-center gap-3 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3.5 shadow-2xs">
+                  <FileArchive size={22} className="shrink-0 text-neutral-500" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13px] font-semibold text-[#111827]">
+                    <p className="truncate text-xs font-bold text-neutral-900">
                       {existing.file_name}
                     </p>
-                    <p className="text-[11px] text-[#9aa2af]">
+                    <p className="text-[11px] text-neutral-400 mt-0.5">
                       {formatSize(existing.file_size)} · v{existing.theme_version} ·{' '}
                       {new Date(existing.updated_at).toLocaleString()}
                     </p>
                   </div>
                 </div>
-                <div className="mt-5 flex flex-col gap-2.5">
+                <div className="mt-6 flex flex-col gap-2.5">
                   <button
                     onClick={() => triggerDownload(existing.download_url, existing.file_name)}
-                    className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#ff6747] px-4 text-sm font-semibold text-white transition hover:bg-[#f85b3a]"
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] px-4 text-xs font-bold text-white shadow-[0_2px_12px_rgba(255,59,0,0.3)] transition hover:brightness-105 cursor-pointer"
                   >
-                    <Download size={17} strokeWidth={2} />
-                    Download existing export
+                    <Download size={16} strokeWidth={2.2} />
+                    <span>Download Existing Theme ZIP</span>
                   </button>
                   <button
                     onClick={() => void startExport()}
-                    className="flex h-11 items-center justify-center gap-2 rounded-xl border border-[#e8e2de] bg-white px-4 text-sm font-semibold text-[#111827] transition hover:bg-[#fff8f5]"
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 text-xs font-bold text-neutral-800 shadow-2xs transition hover:bg-neutral-50 hover:border-neutral-300 cursor-pointer"
                   >
-                    <RefreshCw size={16} strokeWidth={2} />
-                    Regenerate export
+                    <RefreshCw size={15} strokeWidth={2} />
+                    <span>Regenerate Theme Package</span>
                   </button>
                   <button
                     onClick={onClose}
-                    className="flex h-10 items-center justify-center rounded-xl px-4 text-sm font-medium text-[#6b7280] transition hover:bg-[#f6f1ee]"
+                    className="flex h-10 items-center justify-center rounded-xl px-4 text-xs font-semibold text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900 cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -249,40 +249,40 @@ export default function ExportDialog({
 
             {state === 'exporting' && (
               <div>
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <span className="text-sm font-semibold text-[#111827]">{progress.message}</span>
-                  <span className="shrink-0 text-sm font-bold tabular-nums text-[#ff6747]">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <span className="text-xs font-bold text-neutral-900">{progress.message}</span>
+                  <span className="shrink-0 text-xs font-black tabular-nums text-[#FF3B00]">
                     {Math.round(progress.percent)}%
                   </span>
                 </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-[#f1ebe7]">
+                <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-100">
                   <div
-                    className="h-full rounded-full bg-[#ff6747] transition-all duration-300 ease-out"
+                    className="h-full rounded-full bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] transition-all duration-300 ease-out"
                     style={{ width: `${Math.max(2, progress.percent)}%` }}
                   />
                 </div>
-                <ul className="mt-5 space-y-2">
+                <ul className="mt-5 space-y-2.5">
                   {STEP_LIST.map((step, index) => {
                     const done = index < activeStepIndex;
                     const active = index === activeStepIndex;
                     return (
-                      <li key={step.id} className="flex items-center gap-2.5 text-[13px]">
+                      <li key={step.id} className="flex items-center gap-2.5 text-xs">
                         {done ? (
-                          <CheckCircle2 size={16} className="shrink-0 text-[#35b86b]" />
+                          <CheckCircle2 size={16} className="shrink-0 text-emerald-600" />
                         ) : active ? (
-                          <Loader2 size={16} className="shrink-0 animate-spin text-[#ff6747]" />
+                          <Loader2 size={16} className="shrink-0 animate-spin text-[#FF3B00]" />
                         ) : (
                           <span className="grid h-4 w-4 shrink-0 place-items-center">
-                            <span className="h-2 w-2 rounded-full bg-[#e0d8d1]" />
+                            <span className="h-1.5 w-1.5 rounded-full bg-neutral-300" />
                           </span>
                         )}
                         <span
                           className={
                             done
-                              ? 'text-[#6b7280]'
+                              ? 'text-neutral-500 font-medium'
                               : active
-                                ? 'font-semibold text-[#111827]'
-                                : 'text-[#b7ada4]'
+                                ? 'font-bold text-neutral-950'
+                                : 'text-neutral-400'
                           }
                         >
                           {step.label}
@@ -291,35 +291,35 @@ export default function ExportDialog({
                     );
                   })}
                 </ul>
-                <p className="mt-4 text-[11px] text-[#9aa2af]">
-                  Please keep this window open — the export is in progress.
+                <p className="mt-5 text-[11px] text-neutral-400">
+                  Please keep this window open while the Liquid theme archive is being generated.
                 </p>
               </div>
             )}
 
             {state === 'success' && result && (
-              <div className="text-center">
-                <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#eafaf0]">
-                  <CheckCircle2 size={30} strokeWidth={2} className="text-[#35b86b]" />
+              <div className="text-center py-2">
+                <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-emerald-50 border border-emerald-200">
+                  <CheckCircle2 size={30} strokeWidth={2.2} className="text-emerald-600" />
                 </span>
-                <h3 className="mt-3 text-base font-bold text-[#111827]">Theme exported</h3>
-                <p className="mt-1 text-[13px] text-[#6b7280]">
-                  Your Shopify theme is ready and saved to storage.
+                <h3 className="mt-3.5 text-base font-extrabold text-neutral-950">Theme Package Ready</h3>
+                <p className="mt-1 text-xs text-neutral-500 leading-relaxed font-medium">
+                  Your Shopify Online Store 2.0 theme was generated and verified successfully.
                 </p>
-                <div className="mt-3 flex items-center justify-center gap-2 text-[11px] text-[#9aa2af]">
-                  <FileArchive size={13} />
-                  {result.fileName} · {formatSize(result.row.file_size)} · v{result.row.theme_version}
+                <div className="mt-3.5 flex items-center justify-center gap-2 text-xs font-semibold text-neutral-600">
+                  <FileArchive size={14} className="text-neutral-400" />
+                  <span>{result.fileName} · {formatSize(result.row.file_size)} · v{result.row.theme_version}</span>
                 </div>
                 {result.sectionStats.total > 0 && (
-                  <p className="mt-2 text-[11px] text-[#9aa2af]">
+                  <p className="mt-2 text-[11px] text-neutral-400">
                     {result.sectionStats.total} editable section
                     {result.sectionStats.total === 1 ? '' : 's'} generated
                     {result.sectionStats.ai > 0 && ` · ${result.sectionStats.ai} AI-authored`}
                     {result.sectionStats.fallback > 0 &&
-                      ` · ${result.sectionStats.fallback} basic (AI unavailable)`}
+                      ` · ${result.sectionStats.fallback} standard sections`}
                   </p>
                 )}
-                <div className="mt-5 flex flex-col gap-2.5">
+                <div className="mt-6 flex flex-col gap-2.5">
                   <button
                     onClick={() => {
                       if (result.row.download_url) {
@@ -329,39 +329,39 @@ export default function ExportDialog({
                       const url = URL.createObjectURL(result.blob);
                       triggerDownload(url, result.fileName, true);
                     }}
-                    className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#ff6747] px-4 text-sm font-semibold text-white transition hover:bg-[#f85b3a]"
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] px-4 text-xs font-bold text-white shadow-[0_2px_12px_rgba(255,59,0,0.3)] transition hover:brightness-105 cursor-pointer"
                   >
-                    <Download size={17} strokeWidth={2} />
-                    Download ZIP
+                    <Download size={16} strokeWidth={2.2} />
+                    <span>Download Theme ZIP</span>
                   </button>
                   <button
                     onClick={onClose}
-                    className="flex h-10 items-center justify-center rounded-xl px-4 text-sm font-medium text-[#6b7280] transition hover:bg-[#f6f1ee]"
+                    className="flex h-10 items-center justify-center rounded-xl px-4 text-xs font-semibold text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900 cursor-pointer"
                   >
-                    Done
+                    Close
                   </button>
                 </div>
               </div>
             )}
 
             {state === 'error' && (
-              <div className="text-center">
-                <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#fdeceb]">
-                  <AlertTriangle size={28} strokeWidth={2} className="text-[#e5533d]" />
+              <div className="text-center py-2">
+                <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-red-50 border border-red-200">
+                  <AlertTriangle size={28} strokeWidth={2.2} className="text-red-600" />
                 </span>
-                <h3 className="mt-3 text-base font-bold text-[#111827]">Export failed</h3>
-                <p className="mt-1 break-words text-[13px] text-[#6b7280]">{errorMessage}</p>
-                <div className="mt-5 flex flex-col gap-2.5">
+                <h3 className="mt-3.5 text-base font-extrabold text-neutral-950">Export Failed</h3>
+                <p className="mt-1 break-words text-xs text-neutral-500 leading-relaxed font-medium">{errorMessage}</p>
+                <div className="mt-6 flex flex-col gap-2.5">
                   <button
                     onClick={() => void startExport()}
-                    className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#ff6747] px-4 text-sm font-semibold text-white transition hover:bg-[#f85b3a]"
+                    className="flex h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] px-4 text-xs font-bold text-white shadow-[0_2px_12px_rgba(255,59,0,0.3)] transition hover:brightness-105 cursor-pointer"
                   >
-                    <RefreshCw size={16} strokeWidth={2} />
-                    Retry export
+                    <RefreshCw size={15} strokeWidth={2} />
+                    <span>Retry Export</span>
                   </button>
                   <button
                     onClick={onClose}
-                    className="flex h-10 items-center justify-center rounded-xl px-4 text-sm font-medium text-[#6b7280] transition hover:bg-[#f6f1ee]"
+                    className="flex h-10 items-center justify-center rounded-xl px-4 text-xs font-semibold text-neutral-500 transition hover:bg-neutral-100 hover:text-neutral-900 cursor-pointer"
                   >
                     Cancel
                   </button>
@@ -374,3 +374,4 @@ export default function ExportDialog({
     </div>
   );
 }
+

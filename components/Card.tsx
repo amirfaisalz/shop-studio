@@ -7,16 +7,16 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const shadowStyles = {
-  sm: 'shadow-sm',
-  md: 'shadow-md',
-  lg: 'shadow-lg',
+  sm: 'shadow-2xs',
+  md: 'shadow-xs',
+  lg: 'shadow-md',
   xl: 'shadow-xl',
 };
 
 const paddingStyles = {
   sm: 'p-3',
-  md: 'p-4',
-  lg: 'p-6',
+  md: 'p-5',
+  lg: 'p-7',
 };
 
 export default function Card({
@@ -28,10 +28,11 @@ export default function Card({
 }: CardProps) {
   return (
     <div
-      className={`bg-white rounded-base border border-neutral-100 ${shadowStyles[shadow]} ${paddingStyles[padding]} ${className}`}
+      className={`bg-white rounded-2xl border border-neutral-200/90 ${shadowStyles[shadow]} ${paddingStyles[padding]} ${className}`}
       {...props}
     >
       {children}
     </div>
   );
 }
+

@@ -1,19 +1,20 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
 import {
   ChevronDown,
   ChevronLeft,
   Code2,
   Download,
-  Eye,
   FileImage,
   Loader2,
   Redo2,
   Save,
   Store,
   Undo2,
+  Flame,
+  CheckCircle2,
 } from 'lucide-react';
 import { useBuilder } from './BuilderContext';
 import ExportDialog from './ExportDialog';
@@ -51,6 +52,7 @@ export default function EditorTopBar({
   const [menuOpen, setMenuOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [savedBadge, setSavedBadge] = useState(false);
   // Which direct export (code/png) is currently running, plus any last error.
   const [busy, setBusy] = useState<null | 'code' | 'png'>(null);
   const [pngStatus, setPngStatus] = useState('');
@@ -68,11 +70,10 @@ export default function EditorTopBar({
   const hasExportablePages = exportPages.length > 0;
 
   const EXPORT_OPTIONS = [
-    { id: 'shopify', label: 'Export to Shopify', icon: Store, action: () => openExport() },
-    { id: 'zip', label: 'Download ZIP', icon: Download, action: () => openExport() },
-    { id: 'code', label: 'Export Code', icon: Code2, action: () => void runCodeExport() },
-    { id: 'png', label: 'Export to PNG image', icon: FileImage, action: () => void runPngExport() },
-    { id: 'preview', label: 'Preview Theme', icon: Eye, action: () => {} },
+    { id: 'shopify', label: 'Export to Shopify OS 2.0', icon: Store, action: () => openExport() },
+    { id: 'zip', label: 'Download Theme ZIP', icon: Download, action: () => openExport() },
+    { id: 'code', label: 'Export HTML & CSS Code', icon: Code2, action: () => void runCodeExport() },
+    { id: 'png', label: 'Export to PNG Screenshots', icon: FileImage, action: () => void runPngExport() },
   ];
 
   // Shopify theme export is a paid feature. Free users get the upgrade dialog
@@ -122,6 +123,11 @@ export default function EditorTopBar({
     }
   }
 
+  const handleManualSave = () => {
+    setSavedBadge(true);
+    setTimeout(() => setSavedBadge(false), 2500);
+  };
+
   useEffect(() => {
     if (!menuOpen) return;
     function onClick(event: MouseEvent) {
@@ -134,51 +140,62 @@ export default function EditorTopBar({
   }, [menuOpen]);
 
   return (
-    <header className="flex h-16 shrink-0 items-center justify-between gap-3 border-b border-[#ece6e2] bg-white px-4">
+    <header className="flex h-16 shrink-0 items-center justify-between gap-3 border-b border-neutral-200/80 bg-white px-4">
+      {/* Brand & Project Breadcrumb */}
       <div className="flex items-center gap-3">
-        <Image
-          src="/logo.png"
-          alt="ShopStudio"
-          width={34}
-          height={34}
-          className="shrink-0 rounded-lg"
-          priority
-        />
+        <Link
+          href="/dashboard"
+          title="Back to Dashboard"
+          className="flex items-center gap-2.5 transition-transform hover:opacity-90 shrink-0"
+        >
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] text-white shadow-[0_2px_10px_rgba(255,59,0,0.35)]">
+            <Flame size={20} className="fill-white" />
+          </div>
+        </Link>
+
         <div className="hidden sm:flex items-center gap-2">
-          <span className="text-[14px] font-bold text-[#111827]">
+          <Link
+            href="/dashboard"
+            className="text-xs font-bold text-neutral-900 hover:text-[#FF3B00] transition-colors"
+          >
             ShopStudio
-          </span>
-          <span className="text-[#d1d5db]">/</span>
+          </Link>
+          <span className="text-neutral-300">/</span>
           <span
-            className="text-[13px] font-semibold text-[#ff6747] max-w-[200px] truncate"
+            className="text-xs font-bold text-[#FF3B00] max-w-[180px] sm:max-w-[240px] truncate"
             title={projectName}
           >
             {projectName}
           </span>
+          <span className="rounded-md bg-[#FFF3EE] px-1.5 py-0.5 text-[10px] font-bold text-[#FF3B00] border border-[#FFCCBC]">
+            OS 2.0
+          </span>
         </div>
+
         <button
           aria-label={collapsed ? 'Expand chat panel' : 'Collapse chat panel'}
           onClick={onToggleSidebar}
-          className="grid h-8 w-8 place-items-center rounded-lg border border-[#e8e2de] bg-white text-[#4b5563] transition hover:bg-[#fff8f5]"
+          title={collapsed ? 'Show chat sidebar' : 'Hide chat sidebar'}
+          className="grid h-8 w-8 place-items-center rounded-xl border border-neutral-200 bg-white text-neutral-600 transition hover:bg-neutral-50 hover:text-neutral-950 cursor-pointer"
         >
           <ChevronLeft
-            size={17}
+            size={16}
             strokeWidth={2}
-            className={`transition-transform ${collapsed ? 'rotate-180' : ''}`}
+            className={`transition-transform duration-200 ${collapsed ? 'rotate-180' : ''}`}
           />
         </button>
 
         {/* Undo / Redo buttons */}
-        <div className="flex items-center gap-1 border-l border-[#ece6e2] pl-3 ml-1">
+        <div className="flex items-center gap-1 border-l border-neutral-200 pl-2.5 ml-1">
           <button
             type="button"
             onClick={undo}
             disabled={!canUndo || isStreaming}
             title="Undo last change (Ctrl+Z / Cmd+Z)"
             aria-label="Undo last change"
-            className="grid h-8 w-8 place-items-center rounded-lg border border-[#e8e2de] bg-white text-[#4b5563] transition hover:bg-[#fff8f5] hover:text-[#111827] disabled:opacity-30 disabled:cursor-not-allowed"
+            className="grid h-8 w-8 place-items-center rounded-xl border border-neutral-200 bg-white text-neutral-600 transition hover:bg-neutral-50 hover:text-neutral-950 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
           >
-            <Undo2 size={15} strokeWidth={2.2} />
+            <Undo2 size={14} strokeWidth={2.2} />
           </button>
           <button
             type="button"
@@ -186,9 +203,9 @@ export default function EditorTopBar({
             disabled={!canRedo || isStreaming}
             title="Redo (Ctrl+Y / Cmd+Shift+Z)"
             aria-label="Redo"
-            className="grid h-8 w-8 place-items-center rounded-lg border border-[#e8e2de] bg-white text-[#4b5563] transition hover:bg-[#fff8f5] hover:text-[#111827] disabled:opacity-30 disabled:cursor-not-allowed"
+            className="grid h-8 w-8 place-items-center rounded-xl border border-neutral-200 bg-white text-neutral-600 transition hover:bg-neutral-50 hover:text-neutral-950 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
           >
-            <Redo2 size={15} strokeWidth={2.2} />
+            <Redo2 size={14} strokeWidth={2.2} />
           </button>
         </div>
       </div>
@@ -196,55 +213,56 @@ export default function EditorTopBar({
       {/* Center Status Badge */}
       <div className="hidden items-center gap-2 md:flex">
         {isStreaming ? (
-          <div className="flex items-center gap-2 rounded-full border border-[#ffe4dc] bg-[#fff5f2] px-3.5 py-1 text-xs font-semibold text-[#ff6747] animate-pulse">
-            <Loader2 size={13} className="animate-spin text-[#ff6747]" />
+          <div className="flex items-center gap-2 rounded-full border border-[#FFCCBC] bg-[#FFF3EE] px-3.5 py-1 text-xs font-bold text-[#FF3B00] animate-pulse shadow-2xs">
+            <Loader2 size={13} className="animate-spin text-[#FF3B00]" />
             <span className="max-w-[260px] truncate">{currentStep?.message ?? 'Generating storefront…'}</span>
           </div>
         ) : hasExportablePages ? (
-          <div className="flex items-center gap-1.5 rounded-full border border-[#d1fae5] bg-[#f0fdf4] px-3 py-1 text-xs font-semibold text-[#065f46]">
-            <span className="h-2 w-2 rounded-full bg-[#10b981]" />
+          <div className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-[#F0FDF4] px-3.5 py-1 text-xs font-bold text-emerald-800 shadow-2xs">
+            <span className="h-2 w-2 rounded-full bg-[#10B981]" />
             <span>{exportPages.length} {exportPages.length === 1 ? 'page' : 'pages'} live in preview</span>
           </div>
         ) : (
-          <div className="flex items-center gap-1.5 rounded-full border border-[#eee7e3] bg-[#faf8f6] px-3 py-1 text-xs font-medium text-[#9aa2af]">
+          <div className="flex items-center gap-1.5 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-medium text-neutral-500">
             <span>Ready for prompt</span>
           </div>
         )}
       </div>
 
-      <div className="flex shrink-0 items-center gap-3">
+      {/* Right Actions: Export & Save */}
+      <div className="flex shrink-0 items-center gap-2.5">
         <div className="relative" ref={exportRef}>
           <button
             onClick={() => setMenuOpen((open) => !open)}
             disabled={dialogOpen || busy !== null}
-            className="flex h-11 items-center gap-2 rounded-xl border border-[#e8e2de] bg-white px-4 text-sm font-medium text-[#111827] shadow-[0_8px_20px_rgba(31,41,55,0.04)] transition hover:bg-[#fff8f5] disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex h-10 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3.5 text-xs font-bold text-neutral-800 shadow-2xs transition hover:bg-neutral-50 hover:border-neutral-300 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
           >
             {busy ? (
               <>
-                <Loader2 size={16} strokeWidth={2} className="animate-spin text-[#ff6747]" />
-                {busy === 'png' ? pngStatus || 'Exporting…' : 'Exporting…'}
+                <Loader2 size={14} strokeWidth={2} className="animate-spin text-[#FF3B00]" />
+                <span>{busy === 'png' ? pngStatus || 'Exporting…' : 'Exporting…'}</span>
               </>
             ) : (
               <>
-                <Store size={17} strokeWidth={1.9} className="text-[#35b86b]" />
-                Export to Shopify
+                <Store size={15} strokeWidth={2} className="text-[#10B981]" />
+                <span>Export to Shopify</span>
                 <ChevronDown
-                  size={16}
+                  size={14}
                   strokeWidth={2}
-                  className={`text-[#9aa2af] transition-transform ${menuOpen ? 'rotate-180' : ''}`}
+                  className={`text-neutral-400 transition-transform ${menuOpen ? 'rotate-180' : ''}`}
                 />
               </>
             )}
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-64 overflow-hidden rounded-2xl border border-[#eee7e3] bg-white p-2 shadow-[0_24px_48px_rgba(31,41,55,0.14)]">
-              <p className="px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-[#9aa2af]">
-                Export options
+            <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-64 overflow-hidden rounded-2xl border border-neutral-200 bg-white p-2 shadow-[0_20px_48px_rgba(0,0,0,0.12)] animate-in fade-in-50 zoom-in-95 duration-150">
+              <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+                Export Options
               </p>
               {!hasExportablePages && (
-                <p className="px-3 pb-2 text-[11px] text-[#b7ada4]">
-                  Generate a page first to enable export.
+                <p className="px-3 pb-2 text-[11px] text-neutral-400">
+                  Generate a page first to enable export options.
                 </p>
               )}
               {EXPORT_OPTIONS.map((option) => {
@@ -256,10 +274,10 @@ export default function EditorTopBar({
                     key={option.id}
                     onClick={option.action}
                     disabled={disabled}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-[#111827] transition hover:bg-[#fff3ef] disabled:cursor-not-allowed disabled:opacity-40"
+                    className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-xs font-semibold text-neutral-800 transition hover:bg-[#FFF3EE] hover:text-[#FF3B00] disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
                   >
-                    <Icon size={17} strokeWidth={1.9} className="text-[#6b7280]" />
-                    {option.label}
+                    <Icon size={15} strokeWidth={2} className="text-neutral-400" />
+                    <span>{option.label}</span>
                   </button>
                 );
               })}
@@ -267,15 +285,27 @@ export default function EditorTopBar({
           )}
 
           {exportError && !menuOpen && (
-            <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-72 rounded-xl border border-[#f6d5cf] bg-[#fdeceb] px-3.5 py-2.5 text-[12px] text-[#c0432f] shadow-[0_16px_32px_rgba(31,41,55,0.12)]">
+            <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-72 rounded-2xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-xs font-semibold text-red-700 shadow-lg">
               {exportError}
             </div>
           )}
         </div>
 
-        <button className="flex h-11 items-center gap-2 rounded-xl bg-[#ff6747] px-5 text-sm font-semibold text-white shadow-[0_12px_22px_rgba(255,103,71,0.2)] transition hover:bg-[#f85b3a]">
-          <Save size={17} strokeWidth={1.9} />
-          Save
+        <button
+          onClick={handleManualSave}
+          className="flex h-10 items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] px-4 text-xs font-bold text-white shadow-[0_2px_12px_rgba(255,59,0,0.3)] transition-all hover:brightness-105 hover:shadow-[0_4px_16px_rgba(255,59,0,0.4)] cursor-pointer"
+        >
+          {savedBadge ? (
+            <>
+              <CheckCircle2 size={15} strokeWidth={2.4} />
+              <span>Saved!</span>
+            </>
+          ) : (
+            <>
+              <Save size={15} strokeWidth={2} />
+              <span>Save Theme</span>
+            </>
+          )}
         </button>
       </div>
 
@@ -292,9 +322,10 @@ export default function EditorTopBar({
       <UpgradeDialog
         open={upgradeOpen}
         onClose={() => setUpgradeOpen(false)}
-        title="Exporting is a Pro feature"
-        description="Upgrade to export your design as a Shopify theme ZIP and unlock unlimited projects."
+        title="Exporting is a Pro Merchant feature"
+        description="Upgrade to export your design as a Shopify Online Store 2.0 theme ZIP and unlock unlimited storefronts."
       />
     </header>
   );
 }
+
