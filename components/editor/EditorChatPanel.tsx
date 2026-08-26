@@ -5,7 +5,6 @@ import {
   ArrowRight,
   ArrowUp,
   Check,
-  CheckCircle2,
   Copy,
   Layers,
   Loader2,
@@ -194,14 +193,14 @@ export default function EditorChatPanel() {
       ...pages.map((p) => (p.html ? p.html.toLowerCase() : '')),
     ].join(' ');
 
-    const existingPageTypes = new Set(pages.map((p) => p.type));
+    const existingPageTypes = new Set<string>(pages.map((p) => p.type));
 
     return ALL_QUICK_SUGGESTIONS.filter((item) => {
       // Exclude if explicitly clicked/used
       if (usedActionIds.includes(item.id)) return false;
 
       // Exclude page generation if that page already exists in the builder
-      if (item.pageTypeNeeded && existingPageTypes.has(item.pageTypeNeeded as any)) return false;
+      if (item.pageTypeNeeded && existingPageTypes.has(item.pageTypeNeeded)) return false;
 
       // Exclude if keywords already detected in messages or generated page HTML
       const alreadyPresent = item.keywords.some((kw) => combinedContent.includes(kw));

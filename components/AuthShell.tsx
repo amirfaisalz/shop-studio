@@ -29,14 +29,14 @@ export default function AuthShell({
           <Link href="/" className="flex items-center gap-3 group">
             <Image
               src="/logo.png"
-              alt="Shopify Theme Builder"
+              alt="ShopStudio"
               width={42}
               height={42}
               className="rounded-xl shadow-md transition-transform group-hover:scale-105"
               priority
             />
             <div className="leading-tight">
-              <span className="text-lg font-bold tracking-tight text-white">Shopify</span>
+              <span className="text-lg font-bold tracking-tight text-white">ShopStudio</span>
               <span className="block text-xs font-semibold text-[#FF8966]">AI THEME BUILDER</span>
             </div>
           </Link>
@@ -94,7 +94,7 @@ export default function AuthShell({
         {/* Bottom Status */}
         <div className="relative z-10 flex items-center justify-between text-xs text-neutral-400">
           <span>Shopify OS 2.0 Compliant</span>
-          <span>© {new Date().getFullYear()} Shopify AI Theme Builder</span>
+          <span>© {new Date().getFullYear()} ShopStudio</span>
         </div>
       </div>
 
@@ -106,13 +106,13 @@ export default function AuthShell({
             <Link href="/" className="flex items-center gap-3">
               <Image
                 src="/logo.png"
-                alt="Shopify Theme Builder"
+                alt="ShopStudio"
                 width={40}
                 height={40}
                 className="rounded-xl"
               />
               <div className="leading-tight">
-                <span className="text-base font-bold text-[#0F1724]">Shopify</span>
+                <span className="text-base font-bold text-[#0F1724]">ShopStudio</span>
                 <span className="block text-xs font-semibold text-[#FF5840]">AI THEME BUILDER</span>
               </div>
             </Link>

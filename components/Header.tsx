@@ -13,14 +13,14 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/logo.png"
-              alt="Shopify Theme Builder"
+              alt="ShopStudio"
               width={40}
               height={40}
               className="rounded-lg"
             />
             <div className="flex flex-col">
-              <p className="text-sm font-semibold text-neutral-900">Shopify</p>
-              <p className="text-xs text-neutral-600">Theme Builder</p>
+              <p className="text-sm font-semibold text-neutral-900">ShopStudio</p>
+              <p className="text-xs text-neutral-600">AI Theme Builder</p>
             </div>
           </Link>
         </div>

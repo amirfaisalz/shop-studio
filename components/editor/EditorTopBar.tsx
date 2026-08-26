@@ -138,7 +138,7 @@ export default function EditorTopBar({
       <div className="flex items-center gap-3">
         <Image
           src="/logo.png"
-          alt="Shopify Theme Builder"
+          alt="ShopStudio"
           width={34}
           height={34}
           className="shrink-0 rounded-lg"
@@ -146,7 +146,7 @@ export default function EditorTopBar({
         />
         <div className="hidden sm:flex items-center gap-2">
           <span className="text-[14px] font-bold text-[#111827]">
-            Shopify Theme Builder
+            ShopStudio
           </span>
           <span className="text-[#d1d5db]">/</span>
           <span

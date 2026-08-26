@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Shopify Theme Builder",
+  title: "ShopStudio — AI Shopify Theme Builder",
   description: "Generate beautiful Shopify themes with AI",
 };
 

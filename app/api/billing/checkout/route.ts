@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
             unit_amount: plan.amount,
             recurring: { interval: plan.interval },
             product_data: {
-              name: `Shopify Theme Builder — ${plan.name}`,
+              name: `ShopStudio — ${plan.name}`,
             },
           },
         },

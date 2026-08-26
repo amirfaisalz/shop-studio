@@ -1,6 +1,6 @@
 # Project Setup
 
-This guide walks through the full local setup for the AI Shopify Theme Builder, including environment variables, InsForge provisioning, optional billing, Shopify export storage, and project thumbnails.
+This guide walks through the full local setup for ShopStudio (AI Shopify Theme Builder), including environment variables, InsForge provisioning, optional billing, Shopify export storage, and project thumbnails.
 
 ## 1. Prerequisites
 

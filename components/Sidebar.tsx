@@ -21,15 +21,15 @@ export default function Sidebar() {
       <Link href="/dashboard" className="mb-9 flex items-center gap-3 px-1">
         <Image
           src="/logo.png"
-          alt="Shopify Theme Builder"
+          alt="ShopStudio"
           width={50}
           height={50}
           className="shrink-0 rounded-lg"
           priority
         />
         <div className="leading-tight">
-          <p className="text-base font-bold text-[#111827]">Shopify</p>
-          <p className="text-base font-bold text-[#111827]">Theme Builder</p>
+          <p className="text-base font-bold text-[#111827]">ShopStudio</p>
+          <p className="text-xs font-semibold text-[#FF5840]">AI THEME BUILDER</p>
         </div>
       </Link>
 
