@@ -234,45 +234,49 @@ export default function EditorChatPanel() {
             : 0;
 
   return (
-    <aside className="flex w-[380px] shrink-0 flex-col border-r border-[#ece6e2] bg-white">
+    <aside className="flex w-[380px] shrink-0 flex-col border-r border-neutral-200/80 bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 pb-3.5 pt-4">
+      <div className="flex items-center justify-between border-b border-neutral-100 px-4 pb-3 pt-3.5">
         <button
           onClick={handleNewChat}
-          className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-sm font-semibold text-[#ff6747] transition hover:bg-[#fff3ef]"
+          className="flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-bold text-[#FF3B00] hover:bg-[#FFF3EE] transition-colors cursor-pointer"
         >
-          <Plus size={16} strokeWidth={2.4} />
-          New chat
+          <Plus size={15} strokeWidth={2.4} />
+          <span>New Prompt</span>
         </button>
         <div className="flex items-center gap-2">
           {isStreaming && (
-            <span className="flex items-center gap-1.5 rounded-full bg-[#fff0eb] px-2.5 py-0.5 text-xs font-semibold text-[#ff6747]">
-              <span className="h-2 w-2 animate-ping rounded-full bg-[#ff6747]" />
-              Building
+            <span className="flex items-center gap-1.5 rounded-full bg-[#FFF3EE] px-2.5 py-0.5 text-[11px] font-bold text-[#FF3B00] border border-[#FFCCBC]">
+              <span className="h-1.5 w-1.5 animate-ping rounded-full bg-[#FF3B00]" />
+              Generating
             </span>
           )}
           <button
             aria-label="New prompt"
             onClick={handleNewChat}
-            className="grid h-8 w-8 place-items-center rounded-lg border border-[#e8e2de] bg-white text-[#4b5563] transition hover:bg-[#fff8f5]"
+            className="grid h-8 w-8 place-items-center rounded-xl border border-neutral-200 bg-white text-neutral-600 transition hover:bg-neutral-50 hover:text-neutral-950 cursor-pointer"
           >
-            <SquarePen size={15} strokeWidth={1.9} />
+            <SquarePen size={14} strokeWidth={2} />
           </button>
         </div>
       </div>
 
       {/* Message List */}
-      <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto px-5 pb-4">
-        <p className="text-xs font-semibold tracking-wider uppercase text-[#9aa2af]">Storefront Assistant</p>
+      <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-4">
+        <p className="text-[10px] font-bold tracking-wider uppercase text-neutral-400">
+          Storefront AI Assistant
+        </p>
 
         {messages.length === 0 && !isStreaming && (
-          <div className="rounded-2xl border border-[#eee7e3] bg-[#faf8f6] p-4 text-sm">
-            <div className="flex items-center gap-2 font-semibold text-[#111827]">
-              <Sparkles size={16} className="text-[#ff6747]" />
-              AI Shopify Theme Creator
+          <div className="rounded-2xl border border-neutral-200/90 bg-[#FFFDFB] p-4 text-xs shadow-2xs">
+            <div className="flex items-center gap-2 font-bold text-neutral-950">
+              <span className="grid h-6 w-6 place-items-center rounded-lg bg-gradient-to-br from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] text-white">
+                <Sparkles size={13} />
+              </span>
+              <span>Shopify Theme Studio AI</span>
             </div>
-            <p className="mt-1.5 text-xs leading-relaxed text-[#6b7280]">
-              Describe your brand or product, and I&apos;ll generate a tailored Shopify theme with live preview, responsive sections, and exportable Liquid templates.
+            <p className="mt-2 text-xs leading-relaxed text-neutral-600">
+              Describe your brand or store vibe below. I&apos;ll build tailored Shopify sections in real-time, generate hero copy, product grids, and exportable Liquid templates.
             </p>
           </div>
         )}
@@ -281,7 +285,7 @@ export default function EditorChatPanel() {
           if (message.role === 'user') {
             return (
               <div key={message.id} className="flex justify-end">
-                <div className="max-w-[88%] whitespace-pre-wrap rounded-2xl rounded-tr-sm bg-[#fff2ee] px-4 py-3 text-sm leading-relaxed text-[#111827] shadow-sm">
+                <div className="max-w-[88%] whitespace-pre-wrap rounded-2xl rounded-tr-xs bg-gradient-to-r from-[#FFF3EE] to-[#FFF8F4] border border-[#FFCCBC]/70 px-4 py-3 text-xs leading-relaxed text-neutral-950 shadow-2xs font-medium">
                   {message.content}
                 </div>
               </div>
@@ -289,16 +293,16 @@ export default function EditorChatPanel() {
           }
 
           return (
-            <div key={message.id} className="group relative flex gap-3">
-              <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-xl bg-gradient-to-tr from-[#ff6747] to-[#ff8f73] text-white shadow-sm">
+            <div key={message.id} className="group relative flex gap-2.5">
+              <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] text-white shadow-2xs">
                 <Sparkles size={14} fill="currentColor" strokeWidth={1.5} />
               </span>
-              <div className="max-w-[85%] space-y-2">
-                <div className="rounded-2xl rounded-tl-sm border border-[#eee7e3] bg-white px-4 py-3 text-sm leading-relaxed text-[#374151] shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+              <div className="max-w-[85%] space-y-1.5">
+                <div className="rounded-2xl rounded-tl-xs border border-neutral-200/90 bg-white px-4 py-3 text-xs leading-relaxed text-neutral-800 shadow-2xs">
                   {message.content ? (
                     <span className="whitespace-pre-wrap">{message.content}</span>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 py-1 text-xs text-[#9aa2af]">
+                    <span className="inline-flex items-center gap-1.5 py-0.5 text-xs text-neutral-400 font-medium">
                       Thinking <Dot /> <Dot delay="150ms" /> <Dot delay="300ms" />
                     </span>
                   )}
@@ -308,11 +312,11 @@ export default function EditorChatPanel() {
                   <div className="flex items-center gap-2 pl-1 opacity-0 transition-opacity group-hover:opacity-100">
                     <button
                       onClick={() => copyText(message.id, message.content)}
-                      className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium text-[#9aa2af] transition hover:bg-[#f3f4f6] hover:text-[#4b5563]"
+                      className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-semibold text-neutral-400 transition hover:bg-neutral-100 hover:text-neutral-700 cursor-pointer"
                     >
                       {copiedId === message.id ? (
                         <>
-                          <Check size={11} className="text-[#35b86b]" /> Copied
+                          <Check size={11} className="text-emerald-600" /> Copied
                         </>
                       ) : (
                         <>
@@ -329,31 +333,31 @@ export default function EditorChatPanel() {
 
         {/* Live Building Card */}
         {isStreaming && (
-          <div className="overflow-hidden rounded-2xl border border-[#ffded6] bg-[#fffaf8] p-4 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="overflow-hidden rounded-2xl border border-[#FFCCBC] bg-[#FFF8F4] p-4 shadow-2xs animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="grid h-6 w-6 place-items-center rounded-lg bg-[#ff6747] text-white">
+                <span className="grid h-6 w-6 place-items-center rounded-lg bg-gradient-to-r from-[#FF3B00] to-[#FF6200] text-white">
                   <Loader2 size={13} strokeWidth={2.5} className="animate-spin" />
                 </span>
-                <span className="text-xs font-bold uppercase tracking-wider text-[#ff6747]">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#FF3B00]">
                   {currentStep?.step === 'planning'
                     ? '1. Store Blueprint'
                     : currentStep?.step === 'theming'
-                      ? '2. Theme & Design System'
+                      ? '2. Theme & Colors'
                       : currentStep?.step === 'patching'
                         ? '3. Applying Scoped Edit'
                         : '3. Generating Sections'}
                 </span>
               </div>
-              <span className="text-xs font-semibold text-[#ff6747]">
+              <span className="text-xs font-bold text-[#FF3B00]">
                 {currentStep?.progress ? `${currentStep.progress}%` : 'Building…'}
               </span>
             </div>
 
             {/* Step Progress Bar */}
-            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#fce5df]">
+            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-neutral-200/80">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-[#ff6747] to-[#ff8f73] transition-all duration-500 ease-out"
+                className="h-full rounded-full bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] transition-all duration-500 ease-out"
                 style={{ width: `${Math.max(currentStep?.progress ?? 20, 15)}%` }}
               />
             </div>
@@ -361,24 +365,30 @@ export default function EditorChatPanel() {
             {/* Visual Step Checklist */}
             <div className="mt-3.5 grid grid-cols-3 gap-1.5 text-[11px] font-medium">
               <div
-                className={`flex items-center gap-1 rounded-lg px-2 py-1 ${
-                  stepIndex >= 1 ? 'bg-[#ffeedb] text-[#c05621] font-semibold' : 'text-[#a0aec0]'
+                className={`flex items-center justify-center gap-1 rounded-lg px-2 py-1 transition-colors ${
+                  stepIndex >= 1
+                    ? 'bg-[#FFF3EE] text-[#FF3B00] border border-[#FFCCBC] font-bold'
+                    : 'text-neutral-400 bg-white/60'
                 }`}
               >
                 <Layers size={12} />
                 Plan
               </div>
               <div
-                className={`flex items-center gap-1 rounded-lg px-2 py-1 ${
-                  stepIndex >= 2 ? 'bg-[#ffeedb] text-[#c05621] font-semibold' : 'text-[#a0aec0]'
+                className={`flex items-center justify-center gap-1 rounded-lg px-2 py-1 transition-colors ${
+                  stepIndex >= 2
+                    ? 'bg-[#FFF3EE] text-[#FF3B00] border border-[#FFCCBC] font-bold'
+                    : 'text-neutral-400 bg-white/60'
                 }`}
               >
                 <Palette size={12} />
                 Theme
               </div>
               <div
-                className={`flex items-center gap-1 rounded-lg px-2 py-1 ${
-                  stepIndex >= 3 ? 'bg-[#ffeedb] text-[#c05621] font-semibold' : 'text-[#a0aec0]'
+                className={`flex items-center justify-center gap-1 rounded-lg px-2 py-1 transition-colors ${
+                  stepIndex >= 3
+                    ? 'bg-[#FFF3EE] text-[#FF3B00] border border-[#FFCCBC] font-bold'
+                    : 'text-neutral-400 bg-white/60'
                 }`}
               >
                 <Wand2 size={12} />
@@ -386,7 +396,7 @@ export default function EditorChatPanel() {
               </div>
             </div>
 
-            <p className="mt-3 text-xs leading-relaxed text-[#7c2d12]">
+            <p className="mt-3 text-xs leading-relaxed text-neutral-700 font-medium">
               {currentStep?.message || (generatingPage ? `Generating sections for ${generatingPage.label}…` : 'Creating theme structure…')}
             </p>
           </div>
@@ -394,21 +404,21 @@ export default function EditorChatPanel() {
 
         {/* Completion Card */}
         {showCompletionNotification && !isStreaming && readyPages.length > 0 && (
-          <div className="relative rounded-2xl border border-[#d1fae5] bg-[#f0fdf4] p-4 text-sm shadow-sm animate-in zoom-in-95 duration-300">
+          <div className="relative rounded-2xl border border-emerald-200 bg-[#F0FDF4] p-4 text-xs shadow-2xs animate-in zoom-in-95 duration-300">
             <button
               onClick={dismissCompletionNotification}
-              className="absolute right-3 top-3 text-[#9ca3af] hover:text-[#4b5563]"
+              className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-700 cursor-pointer"
               aria-label="Dismiss notification"
             >
               <X size={14} />
             </button>
-            <div className="flex items-center gap-2 text-[#065f46]">
-              <span className="grid h-6 w-6 place-items-center rounded-full bg-[#10b981] text-white">
-                <Check size={14} strokeWidth={2.6} />
+            <div className="flex items-center gap-2 text-emerald-900">
+              <span className="grid h-6 w-6 place-items-center rounded-full bg-emerald-600 text-white">
+                <Check size={13} strokeWidth={3} />
               </span>
-              <span className="font-bold text-sm">Storefront Ready! 🎉</span>
+              <span className="font-bold text-xs">Storefront Ready! 🎉</span>
             </div>
-            <p className="mt-1.5 text-xs text-[#047857] leading-relaxed">
+            <p className="mt-1.5 text-xs text-emerald-800 leading-relaxed">
               Theme and pages generated successfully. You can preview, edit sections inline, or export the Liquid theme.
             </p>
 
@@ -418,14 +428,14 @@ export default function EditorChatPanel() {
                 <button
                   key={page.id}
                   onClick={() => setActivePage(page.id)}
-                  className={`flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
+                  className={`flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-bold transition cursor-pointer ${
                     activePageId === page.id
-                      ? 'bg-[#10b981] text-white shadow-sm'
-                      : 'bg-white border border-[#a7f3d0] text-[#065f46] hover:bg-[#ecfdf5]'
+                      ? 'bg-emerald-600 text-white shadow-2xs'
+                      : 'bg-white border border-emerald-300 text-emerald-800 hover:bg-emerald-50'
                   }`}
                 >
                   <Store size={12} />
-                  {page.label}
+                  <span>{page.label}</span>
                   <ArrowRight size={10} />
                 </button>
               ))}
@@ -435,16 +445,16 @@ export default function EditorChatPanel() {
 
         {/* Error Card */}
         {error && (
-          <div className="flex flex-col gap-2.5 rounded-xl border border-[#f6d5cd] bg-[#fff4f1] p-3.5 text-sm text-[#b4432a]">
-            <p className="leading-relaxed text-xs">{error}</p>
+          <div className="flex flex-col gap-2.5 rounded-2xl border border-red-200 bg-red-50 p-3.5 text-xs text-red-800">
+            <p className="leading-relaxed font-medium">{error}</p>
             <button
               type="button"
               onClick={retryLast}
               disabled={isStreaming}
-              className="inline-flex items-center gap-1.5 self-start rounded-lg bg-[#ff6747] px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-[#f85b3a] disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 self-start rounded-xl bg-[#FF3B00] px-3 py-1.5 text-xs font-bold text-white shadow-2xs transition hover:bg-[#E03E00] disabled:opacity-50 cursor-pointer"
             >
               <RotateCw size={12} strokeWidth={2.2} />
-              Retry Generation
+              <span>Retry Generation</span>
             </button>
           </div>
         )}
@@ -452,20 +462,20 @@ export default function EditorChatPanel() {
 
       {/* Quick Interactive Suggestions */}
       {!isStreaming && displayedSuggestions.length > 0 && (
-        <div className="border-t border-[#f5f1ee] px-4 pt-2.5 pb-1">
+        <div className="border-t border-neutral-100 px-4 pt-2.5 pb-1">
           <div className="flex items-center justify-between mb-1.5">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#9aa2af]">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
               Quick Actions
             </p>
             {availableSuggestions.length > 5 && (
               <button
                 type="button"
                 onClick={() => setShuffleOffset((prev) => prev + 3)}
-                className="flex items-center gap-1 text-[11px] font-medium text-[#ff6747] hover:text-[#f85b3a] transition"
+                className="flex items-center gap-1 text-[11px] font-semibold text-[#FF3B00] hover:text-[#E03E00] transition cursor-pointer"
                 title="Show different suggestions"
               >
                 <RotateCw size={10} />
-                More ideas
+                <span>More ideas</span>
               </button>
             )}
           </div>
@@ -474,7 +484,7 @@ export default function EditorChatPanel() {
               <button
                 key={item.id}
                 onClick={() => submit(item.prompt, item.id)}
-                className="shrink-0 rounded-full border border-[#ece6e2] bg-[#faf8f6] px-2.5 py-1 text-[11px] font-medium text-[#4b5563] transition hover:border-[#ffcfc4] hover:bg-[#fff4f1] hover:text-[#ff6747] shadow-xs"
+                className="shrink-0 rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-[11px] font-semibold text-neutral-700 transition hover:border-[#FFCCBC] hover:bg-[#FFF3EE] hover:text-[#FF3B00] shadow-2xs cursor-pointer"
               >
                 {item.label}
               </button>
@@ -484,8 +494,8 @@ export default function EditorChatPanel() {
       )}
 
       {/* Input Form */}
-      <div className="border-t border-[#f0ebe7] p-4">
-        <div className="rounded-2xl border border-[#e8e2de] bg-white p-3 shadow-[0_10px_24px_rgba(31,41,55,0.05)] focus-within:border-[#ff9d85] focus-within:ring-2 focus-within:ring-[#ff6747]/10 transition">
+      <div className="border-t border-neutral-200/80 p-4">
+        <div className="rounded-2xl border border-neutral-200/90 bg-white p-3 shadow-xs focus-within:border-[#FF3B00] focus-within:ring-2 focus-within:ring-[#FF3B00]/15 transition-all">
           <textarea
             aria-label="Ask anything about your theme"
             placeholder={isStreaming ? 'Generating storefront…' : 'Ask to add a section, edit style, or generate a page…'}
@@ -499,24 +509,24 @@ export default function EditorChatPanel() {
               }
             }}
             disabled={isStreaming}
-            className="w-full resize-none border-0 bg-transparent px-1 py-1 text-sm text-[#111827] outline-none placeholder:text-[#9aa2af] disabled:opacity-60"
+            className="w-full resize-none border-0 bg-transparent px-1 py-1 text-xs text-neutral-900 outline-none placeholder:text-neutral-400 disabled:opacity-60 leading-relaxed font-medium"
           />
-          <div className="flex items-center justify-between pt-1">
+          <div className="flex items-center justify-between pt-1.5 border-t border-neutral-100 mt-1">
             <div className="flex items-center gap-1.5">
-              <span className="text-[11px] font-medium text-[#9aa2af]">
-                Press <kbd className="rounded bg-[#f3f4f6] px-1 py-0.5 text-[10px] font-semibold text-[#6b7280]">Enter</kbd> to send
+              <span className="text-[10px] font-medium text-neutral-400">
+                Press <kbd className="rounded bg-neutral-100 px-1 py-0.5 text-[10px] font-semibold text-neutral-600 border border-neutral-200">Enter</kbd> to send
               </span>
             </div>
             <button
               aria-label="Send message"
               onClick={() => submit()}
               disabled={isStreaming || !draft.trim()}
-              className="grid h-8 w-8 place-items-center rounded-lg bg-[#ff6747] text-white shadow-[0_8px_16px_rgba(255,103,71,0.22)] transition hover:bg-[#f85b3a] disabled:cursor-not-allowed disabled:opacity-40"
+              className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-r from-[#FF3B00] to-[#FF6200] text-white shadow-[0_2px_8px_rgba(255,59,0,0.25)] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
             >
               {isStreaming ? (
-                <Loader2 size={15} strokeWidth={2.2} className="animate-spin" />
+                <Loader2 size={14} strokeWidth={2.4} className="animate-spin" />
               ) : (
-                <ArrowUp size={16} strokeWidth={2.4} />
+                <ArrowUp size={15} strokeWidth={2.4} />
               )}
             </button>
           </div>
@@ -529,8 +539,9 @@ export default function EditorChatPanel() {
 function Dot({ delay = '0ms' }: { delay?: string }) {
   return (
     <span
-      className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-[#ff8f73]"
+      className="inline-block h-1.5 w-1.5 animate-bounce rounded-full bg-[#FF3B00]"
       style={{ animationDelay: delay }}
     />
   );
 }
+

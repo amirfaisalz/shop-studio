@@ -267,15 +267,13 @@ export default function EditorPreview() {
   // A manual reload remounts the frame, so it must re-handshake.
   useEffect(() => {
     readyRef.current = false;
-  }, [reloadKey]);
-
-  return (
+  }, [reloadKey]);  return (
     <section className="flex min-w-0 flex-1 flex-col">
-      <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-[#ece6e2] bg-white shadow-[0_10px_30px_rgba(31,41,55,0.05)]">
+      <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-none md:rounded-2xl border-0 md:border md:border-neutral-200/90 bg-white md:shadow-xs">
         {/* Browser tab strip */}
-        <div className="flex items-center gap-1 overflow-x-auto border-b border-[#efeae6] bg-[#f4f0ec] px-2 pt-2">
+        <div className="flex items-center gap-1 overflow-x-auto border-b border-neutral-200/80 bg-[#F9F7F5] px-2 pt-2">
           {pages.length === 0 && (
-            <div className="flex h-9 items-center px-3 text-sm text-[#9aa2af]">No pages yet</div>
+            <div className="flex h-9 items-center px-3 text-xs font-semibold text-neutral-400">No pages yet</div>
           )}
           {pages.map((tab) => (
             <PreviewTab
@@ -290,31 +288,33 @@ export default function EditorPreview() {
         </div>
 
         {/* Browser toolbar / address bar */}
-        <div className="flex items-center gap-3 border-b border-[#efeae6] bg-white px-3 py-2">
+        <div className="flex items-center gap-3 border-b border-neutral-200/80 bg-white px-3.5 py-2">
+          {/* macOS window indicator dots */}
           <div className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
-            <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
-            <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F56] ring-1 ring-black/5" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E] ring-1 ring-black/5" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#27C93F] ring-1 ring-black/5" />
           </div>
 
-          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-[#eee7e3] bg-[#faf8f6] px-3 py-1.5">
-            <span className="grid h-4 w-4 place-items-center rounded-full bg-[#e8f6ee] text-[9px] font-bold text-[#35b86b]">
+          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-neutral-200/90 bg-neutral-50 px-3 py-1.5 shadow-2xs">
+            <span className="grid h-4 w-4 place-items-center rounded-full bg-emerald-100 text-[9px] font-black text-emerald-700">
               ✓
             </span>
-            <span className="truncate text-[13px] text-[#6b7280]">
-              {STORE_DOMAIN}
-              <span className="text-[#9aa2af]">{activePage?.path ?? '/'}</span>
+            <span className="truncate text-xs font-medium text-neutral-700">
+              <span className="font-semibold text-neutral-900">{STORE_DOMAIN}</span>
+              <span className="text-neutral-400">{activePage?.path ?? '/'}</span>
             </span>
             <button
               aria-label="Reload preview"
               onClick={() => setReloadKey((k) => k + 1)}
-              className="ml-auto grid h-6 w-6 shrink-0 place-items-center rounded-md text-[#9aa2af] transition hover:bg-black/5 hover:text-[#4b5563]"
+              className="ml-auto grid h-6 w-6 shrink-0 place-items-center rounded-lg text-neutral-400 transition hover:bg-neutral-200/60 hover:text-neutral-700 cursor-pointer"
             >
-              <RotateCw size={14} strokeWidth={2} />
+              <RotateCw size={13} strokeWidth={2} />
             </button>
           </div>
 
-          <div className="flex items-center gap-1 rounded-lg border border-[#eee7e3] bg-white p-0.5">
+          {/* Viewport switchers (Desktop / Tablet / Mobile) */}
+          <div className="flex items-center gap-1 rounded-xl border border-neutral-200/90 bg-neutral-50 p-0.5">
             {VIEWPORTS.map((v) => {
               const Icon = v.icon;
               const isActive = v.id === viewport;
@@ -324,44 +324,45 @@ export default function EditorPreview() {
                   aria-label={v.label}
                   aria-pressed={isActive}
                   onClick={() => setViewport(v.id)}
-                  className={`grid h-7 w-7 place-items-center rounded-md transition ${isActive
-                      ? 'bg-[#fff3ef] text-[#f05a32]'
-                      : 'text-[#9aa2af] hover:bg-[#faf8f6] hover:text-[#4b5563]'
-                    }`}
+                  className={`grid h-7 w-7 place-items-center rounded-lg transition cursor-pointer ${
+                    isActive
+                      ? 'bg-[#FFF3EE] text-[#FF3B00] border border-[#FFCCBC] shadow-2xs'
+                      : 'text-neutral-400 hover:bg-white hover:text-neutral-700'
+                  }`}
                 >
-                  <Icon size={15} strokeWidth={1.9} />
+                  <Icon size={14} strokeWidth={2} />
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Canvas */}
-        <div className="flex-1 overflow-auto bg-[#fafafa]">
+        {/* Canvas Area */}
+        <div className="flex-1 overflow-auto bg-[#FBF9F7] p-2 md:p-3">
           <div
-            className="relative mx-auto h-full min-h-full overflow-hidden rounded-xl border border-[#ece6e2] bg-white transition-[max-width] duration-300"
+            className="relative mx-auto h-full min-h-full overflow-hidden rounded-xl border border-neutral-200/90 bg-white shadow-2xs transition-[max-width] duration-300"
             style={{ maxWidth: viewportWidth }}
           >
             {/* Inline-edit toggle — top-right of the preview. */}
             {activePage && activeHtml && (
               <div className="absolute right-3 top-3 z-20 flex items-center gap-2">
                 {isImageGenerating && (
-                  <div className="flex items-center gap-2 rounded-lg border border-[#ffd7ce] bg-white/95 px-3 py-1.5 text-[13px] font-medium text-[#c0432f] shadow-sm backdrop-blur">
-                    <Loader2 size={15} strokeWidth={2.2} className="animate-spin" />
-                    Generating image…
+                  <div className="flex items-center gap-1.5 rounded-xl border border-[#FFCCBC] bg-white/95 px-3 py-1.5 text-xs font-bold text-[#FF3B00] shadow-sm backdrop-blur">
+                    <Loader2 size={14} strokeWidth={2.4} className="animate-spin text-[#FF3B00]" />
+                    <span>Generating image…</span>
                   </div>
                 )}
                 <button
                   onClick={() => setEditMode((v) => !v)}
                   aria-pressed={editMode}
-                  className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-[13px] font-medium shadow-sm transition ${
+                  className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold shadow-2xs transition cursor-pointer ${
                     editMode
-                      ? 'border-transparent bg-[#f05a32] text-white hover:bg-[#e14a24]'
-                      : 'border-[#eee7e3] bg-white/90 text-[#4b5563] backdrop-blur hover:bg-white hover:text-[#111827]'
+                      ? 'border-transparent bg-[#FF3B00] text-white hover:bg-[#E03E00] shadow-[0_2px_10px_rgba(255,59,0,0.3)]'
+                      : 'border-neutral-200 bg-white/95 text-neutral-700 backdrop-blur hover:bg-white hover:text-neutral-950'
                   }`}
                 >
-                  {editMode ? <Check size={15} strokeWidth={2.2} /> : <Pencil size={15} strokeWidth={2} />}
-                  {editMode ? 'Done' : 'Edit'}
+                  {editMode ? <Check size={14} strokeWidth={2.4} /> : <Pencil size={14} strokeWidth={2} />}
+                  <span>{editMode ? 'Done' : 'Edit Elements'}</span>
                 </button>
               </div>
             )}
@@ -374,8 +375,6 @@ export default function EditorPreview() {
                 srcDoc={shell}
                 sandbox="allow-scripts"
                 onLoad={() => {
-                  // Reliable trigger (independent of the postMessage handshake):
-                  // by load, the shell's listener is attached and Tailwind is ready.
                   readyRef.current = true;
                   lastSyncedHtmlRef.current = null;
                   postTheme(themeCss);
@@ -386,14 +385,14 @@ export default function EditorPreview() {
               />
             ) : (
               <div className="grid h-full min-h-[320px] place-items-center">
-                <div className="flex flex-col items-center gap-3 text-center text-[#9aa2af]">
+                <div className="flex flex-col items-center gap-3 text-center text-neutral-400">
                   {generatingPageId ? (
                     <>
-                      <Loader2 size={22} className="animate-spin text-[#ff8a66]" />
-                      <p className="text-sm font-medium">Generating your preview…</p>
+                      <Loader2 size={22} className="animate-spin text-[#FF3B00]" />
+                      <p className="text-xs font-bold text-neutral-700">Generating your preview…</p>
                     </>
                   ) : (
-                    <p className="text-sm font-medium">
+                    <p className="text-xs font-medium">
                       Your storefront preview will appear here.
                     </p>
                   )}
@@ -404,9 +403,11 @@ export default function EditorPreview() {
             {/* Overlay while a page is still empty and generating. */}
             {activePage && !activeHtml && generatingPageId === activePage.id && (
               <div className="pointer-events-none absolute inset-0 grid place-items-center bg-white">
-                <div className="flex flex-col items-center gap-3 text-center text-[#9aa2af]">
-                  <Loader2 size={22} className="animate-spin text-[#ff8a66]" />
-                  <p className="text-sm font-medium">Generating your {activePage.label}…</p>
+                <div className="flex flex-col items-center gap-3 text-center text-neutral-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] text-white animate-pulse">
+                    <Loader2 size={20} className="animate-spin" />
+                  </div>
+                  <p className="text-xs font-bold text-neutral-900">Generating sections for {activePage.label}…</p>
                 </div>
               </div>
             )}
@@ -415,18 +416,18 @@ export default function EditorPreview() {
             {activePage && !activeHtml && !generatingPageId && error && (
               <div className="absolute inset-0 grid place-items-center bg-white p-6">
                 <div className="flex max-w-sm flex-col items-center gap-3 text-center">
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#fff0ec] text-[#ff6747]">
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#FFF3EE] text-[#FF3B00] border border-[#FFCCBC]">
                     <RotateCw size={22} strokeWidth={2} />
                   </div>
-                  <h4 className="text-sm font-bold text-[#111827]">Generation was interrupted</h4>
-                  <p className="text-xs text-[#6b7280] leading-relaxed">{error}</p>
+                  <h4 className="text-sm font-bold text-neutral-950">Generation was interrupted</h4>
+                  <p className="text-xs text-neutral-500 leading-relaxed font-medium">{error}</p>
                   <button
                     type="button"
                     onClick={retryLast}
-                    className="mt-1 inline-flex items-center gap-1.5 rounded-xl bg-[#ff6747] px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#f85b3a] transition"
+                    className="mt-1 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF3B00] to-[#FF6200] px-4 py-2 text-xs font-bold text-white shadow-2xs hover:brightness-105 transition cursor-pointer"
                   >
                     <RotateCw size={13} strokeWidth={2.2} />
-                    Retry Generation
+                    <span>Retry Generation</span>
                   </button>
                 </div>
               </div>
@@ -435,18 +436,18 @@ export default function EditorPreview() {
             {/* Missing Page Modal / Interactive Notification */}
             {missingPagePrompt && (
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-xs animate-in fade-in duration-150">
-                <div className="w-full max-w-md rounded-2xl border border-[#ece6e2] bg-white p-6 shadow-[0_24px_48px_rgba(0,0,0,0.22)]">
+                <div className="w-full max-w-md rounded-3xl border border-neutral-200 bg-white p-6 shadow-[0_24px_48px_rgba(0,0,0,0.18)]">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#fff0eb] text-[#ff6747]">
+                      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-[#FFF3EE] text-[#FF3B00] border border-[#FFCCBC]">
                         <Sparkles size={20} strokeWidth={2.2} />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold text-[#111827]">
+                        <h3 className="text-sm font-extrabold text-neutral-950">
                           Halaman Belum Dibuat
                         </h3>
-                        <p className="text-xs text-[#6b7280]">
-                          Tautan: <code className="rounded bg-[#f4f0ec] px-1.5 py-0.5 font-mono text-[#ff6747] font-semibold">{missingPagePrompt.path}</code>
+                        <p className="text-[11px] text-neutral-500 mt-0.5">
+                          Tautan: <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-[#FF3B00] font-bold border border-neutral-200">{missingPagePrompt.path}</code>
                         </p>
                       </div>
                     </div>
@@ -454,17 +455,17 @@ export default function EditorPreview() {
                       type="button"
                       aria-label="Tutup dialog"
                       onClick={() => setMissingPagePrompt(null)}
-                      className="grid h-8 w-8 place-items-center rounded-lg text-[#9aa2af] transition hover:bg-[#f4f0ec] hover:text-[#111827]"
+                      className="grid h-8 w-8 place-items-center rounded-xl text-neutral-400 transition hover:bg-neutral-100 hover:text-neutral-700 cursor-pointer"
                     >
-                      <X size={16} />
+                      <X size={15} />
                     </button>
                   </div>
 
-                  <div className="mt-4 rounded-xl border border-[#f0eae6] bg-[#faf8f6] p-3.5 text-xs text-[#4b5563]">
-                    <p className="font-semibold text-[#111827] mb-1">
-                      Tipe Halaman: <span className="text-[#ff6747]">{missingPagePrompt.label}</span>
+                  <div className="mt-4 rounded-2xl border border-neutral-200 bg-neutral-50 p-3.5 text-xs text-neutral-700">
+                    <p className="font-bold text-neutral-950 mb-1">
+                      Tipe Halaman: <span className="text-[#FF3B00]">{missingPagePrompt.label}</span>
                     </p>
-                    <p className="text-[#6b7280] leading-relaxed">
+                    <p className="text-neutral-500 leading-relaxed font-medium">
                       Halaman ini belum ada di tema toko Anda. Ingin AI membuatkan halaman ini sekarang dengan tata letak & gaya visual yang selaras?
                     </p>
                   </div>
@@ -473,7 +474,7 @@ export default function EditorPreview() {
                     <button
                       type="button"
                       onClick={() => setMissingPagePrompt(null)}
-                      className="rounded-xl border border-[#e8e2de] bg-white px-4 py-2 text-xs font-semibold text-[#4b5563] transition hover:bg-[#f9f8f6]"
+                      className="rounded-xl border border-neutral-200 bg-white px-4 py-2 text-xs font-bold text-neutral-700 transition hover:bg-neutral-50 cursor-pointer"
                     >
                       Batal
                     </button>
@@ -485,10 +486,10 @@ export default function EditorPreview() {
                         sendMessage(promptToSend);
                       }}
                       disabled={isStreaming}
-                      className="flex items-center gap-2 rounded-xl bg-[#ff6747] px-4 py-2 text-xs font-semibold text-white shadow-[0_8px_18px_rgba(255,103,71,0.24)] transition hover:bg-[#f85b3a] disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] px-4 py-2 text-xs font-bold text-white shadow-[0_2px_12px_rgba(255,59,0,0.3)] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
                     >
                       <Sparkles size={14} />
-                      Buat Halaman Ini ✨
+                      <span>Buat Halaman Ini ✨</span>
                     </button>
                   </div>
                 </div>
@@ -517,26 +518,28 @@ function PreviewTab({
   const Icon = PAGE_ICONS[tab.type] ?? Grid3x3;
   return (
     <div
-      className={`group flex h-9 min-w-0 max-w-[180px] shrink-0 items-center gap-2 rounded-t-lg px-3 text-sm transition ${isActive
-          ? '-mb-px border-x border-t border-[#efeae6] bg-white font-medium text-[#111827]'
-          : 'text-[#6b7280] hover:bg-white/60'
-        }`}
+      className={`group flex h-9 min-w-0 max-w-[190px] shrink-0 items-center gap-2 rounded-t-xl px-3 text-xs transition cursor-pointer ${
+        isActive
+          ? '-mb-px border-x border-t border-neutral-200/90 bg-white font-bold text-neutral-950 shadow-2xs'
+          : 'text-neutral-500 hover:bg-white/80 hover:text-neutral-800'
+      }`}
     >
-      <button onClick={onSelect} className="flex min-w-0 items-center gap-2">
+      <button onClick={onSelect} className="flex min-w-0 items-center gap-2 cursor-pointer">
         {isGenerating ? (
-          <Loader2 size={14} className="animate-spin text-[#f05a32]" />
+          <Loader2 size={13} className="animate-spin text-[#FF3B00]" />
         ) : (
-          <Icon size={15} strokeWidth={1.9} className={isActive ? 'text-[#f05a32]' : 'text-[#9aa2af]'} />
+          <Icon size={14} strokeWidth={2} className={isActive ? 'text-[#FF3B00]' : 'text-neutral-400'} />
         )}
         <span className="truncate">{tab.label}</span>
       </button>
       <button
         aria-label={`Close ${tab.label}`}
         onClick={onClose}
-        className="grid h-5 w-5 shrink-0 place-items-center rounded-md text-[#9aa2af] opacity-0 transition hover:bg-black/5 hover:text-[#4b5563] group-hover:opacity-100"
+        className="grid h-5 w-5 shrink-0 place-items-center rounded-md text-neutral-400 opacity-0 transition hover:bg-neutral-100 hover:text-neutral-700 group-hover:opacity-100 cursor-pointer"
       >
-        <X size={13} strokeWidth={2.2} />
+        <X size={12} strokeWidth={2.4} />
       </button>
     </div>
   );
 }
+

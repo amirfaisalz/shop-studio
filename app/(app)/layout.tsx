@@ -8,10 +8,11 @@ export default function AppLayout({
 }>) {
   return (
     <AppAuthGate>
-      <div className="flex flex-1">
+      <div className="flex min-h-screen bg-[#fffdfc] text-neutral-950 selection:bg-[#FF4500]/20 selection:text-[#FF4500]">
         <Sidebar />
-        <main className="flex-1 pl-64">{children}</main>
+        <main className="flex-1 pl-64 min-h-screen">{children}</main>
       </div>
     </AppAuthGate>
   );
 }
+

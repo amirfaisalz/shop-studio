@@ -19,7 +19,16 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "ShopStudio — AI Shopify Theme Builder",
-  description: "Generate beautiful Shopify themes with AI",
+  description: "Generate production-ready Shopify Online Store 2.0 themes with AI in seconds.",
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon', type: 'image/png' },
+    ],
+  },
 };
 
 export default function RootLayout({

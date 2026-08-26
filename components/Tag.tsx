@@ -1,6 +1,7 @@
 import React from 'react';
+import { X } from 'lucide-react';
 
-type TagVariant = 'default' | 'success' | 'warning' | 'error' | 'info' | 'purple';
+type TagVariant = 'default' | 'primary' | 'fiery' | 'success' | 'warning' | 'error' | 'info' | 'purple';
 
 interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: TagVariant;
@@ -14,30 +15,40 @@ const variantStyles: Record<TagVariant, { bg: string; text: string; border: stri
     text: 'text-neutral-700',
     border: 'border-neutral-200',
   },
+  primary: {
+    bg: 'bg-[#FFF3EE]',
+    text: 'text-[#FF3B00]',
+    border: 'border-[#FFCCBC]',
+  },
+  fiery: {
+    bg: 'bg-[#FFF3EE]',
+    text: 'text-[#FF3B00]',
+    border: 'border-[#FFCCBC]',
+  },
   success: {
-    bg: 'bg-green-50',
-    text: 'text-success',
-    border: 'border-green-200',
+    bg: 'bg-[#F0FDF4]',
+    text: 'text-emerald-700',
+    border: 'border-emerald-200',
   },
   warning: {
-    bg: 'bg-yellow-50',
-    text: 'text-warning',
-    border: 'border-yellow-200',
+    bg: 'bg-[#FFFBEB]',
+    text: 'text-amber-700',
+    border: 'border-amber-200',
   },
   error: {
     bg: 'bg-red-50',
-    text: 'text-error',
+    text: 'text-red-700',
     border: 'border-red-200',
   },
   info: {
     bg: 'bg-blue-50',
-    text: 'text-info',
+    text: 'text-blue-700',
     border: 'border-blue-200',
   },
   purple: {
-    bg: 'bg-purple-50',
-    text: 'text-purple',
-    border: 'border-purple-200',
+    bg: 'bg-[#F0E9FF]',
+    text: 'text-[#8B5CF8]',
+    border: 'border-[#DDD6FE]',
   },
 };
 
@@ -52,19 +63,20 @@ export default function Tag({
 
   return (
     <span
-      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium border ${styles.bg} ${styles.text} ${styles.border} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${styles.bg} ${styles.text} ${styles.border} ${className}`}
       {...props}
     >
       {children}
       {onRemove && (
         <button
           onClick={onRemove}
-          className="ml-1 hover:opacity-70 transition-opacity"
+          className="ml-0.5 hover:opacity-70 transition-opacity cursor-pointer"
           aria-label="Remove tag"
         >
-          ✕
+          <X size={12} />
         </button>
       )}
     </span>
   );
 }
+

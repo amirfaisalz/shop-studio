@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
-  FolderOpen,
   ImageOff,
   Loader2,
   Plus,
@@ -15,6 +14,7 @@ import {
   AlertCircle,
   Download,
   Sliders,
+  Flame,
   X,
 } from 'lucide-react';
 import { useAuth } from '@/components';
@@ -38,7 +38,7 @@ const starterBlueprints = [
     category: 'Beauty & Wellness',
     desc: 'Pastel aesthetic, clinical efficacy metrics, serum carousel, and customer reviews',
     emoji: '🧴',
-    color: 'bg-[#FFF0EC] text-[#FF5840] border-[#FFE2DC]',
+    color: 'bg-[#FFF3EE] text-[#FF3B00] border-[#FFCCBC]',
     prompt: 'Create a high-end luxury skincare storefront with pastel aesthetic, clinical proof stats, featured serum carousel, and reviews.',
   },
   {
@@ -46,7 +46,7 @@ const starterBlueprints = [
     category: 'Fashion & Apparel',
     desc: 'Dark high-energy mode, oversized typography, lookbook grid, and drop countdown',
     emoji: '⚡',
-    color: 'bg-[#F0E9FF] text-[#885CF8] border-[#E5DBFF]',
+    color: 'bg-[#F0E9FF] text-[#8B5CF8] border-[#DDD6FE]',
     prompt: 'Build a high-energy dark streetwear brand store with limited drop countdown, oversized typography, lookbook grid, and cart drawer.',
   },
   {
@@ -54,7 +54,7 @@ const starterBlueprints = [
     category: 'Jewelry & Watches',
     desc: 'Minimalist editorial layout, sapphire crystal specs, split hero, and concierge drawer',
     emoji: '⌚',
-    color: 'bg-[#FFF7E7] text-[#F59B14] border-[#FFECC7]',
+    color: 'bg-[#FFFBEB] text-[#F59E0B] border-[#FDE68A]',
     prompt: 'Design a luxury watch and timepiece Shopify store with high-contrast editorial minimalism, mechanical specs table, and VIP inquiry drawer.',
   },
   {
@@ -62,7 +62,7 @@ const starterBlueprints = [
     category: 'Food & Beverage',
     desc: 'Flavor radar notes, roast level sliders, subscription builder, and bundle savings',
     emoji: '☕',
-    color: 'bg-[#EAFFEF] text-[#22CC58] border-[#D1F7DB]',
+    color: 'bg-[#ECFDF5] text-[#10B981] border-[#A7F3D0]',
     prompt: 'Create an artisan coffee roastery storefront with origin flavor notes tags, roast sliders, subscription builder, and bundle discounts.',
   },
 ];
@@ -216,17 +216,17 @@ export default function ProjectsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#fffdfc] px-6 py-10 sm:px-10">
+    <div className="min-h-screen bg-[#fffdfc] px-6 py-8 sm:px-10">
       <div className="mx-auto max-w-6xl">
         {/* Header Area */}
-        <header className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <header className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end border-b border-neutral-200/80 pb-6">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#FF5840]">
-              <FolderOpen size={14} />
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#FF3B00]">
+              <Flame size={14} className="fill-[#FF3B00]" />
               <span>PROJECT DIRECTORY</span>
             </div>
-            <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-[#0F1724]">Your Storefronts</h1>
-            <p className="mt-1 text-sm text-[#4B5563]">
+            <h1 className="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-950">Your Storefronts</h1>
+            <p className="mt-1 text-xs sm:text-sm text-neutral-600">
               Every Shopify theme you&apos;ve generated, ready to reopen, customize, and export.
             </p>
           </div>
@@ -240,7 +240,7 @@ export default function ProjectsPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search storefronts…"
-                  className="h-10 w-full rounded-xl border border-[#e2dcda] bg-white pl-9 pr-8 text-xs text-[#0F1724] placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#FF5840]/30"
+                  className="h-10 w-full rounded-xl border border-neutral-200 bg-white pl-9 pr-8 text-xs text-neutral-950 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#FF4500]/30"
                 />
                 {searchQuery && (
                   <button
@@ -262,19 +262,19 @@ export default function ProjectsPage() {
                   router.push('/dashboard');
                 }
               }}
-              className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-[#FF5840] px-4 text-xs font-bold text-white shadow-[0_10px_20px_rgba(255,88,64,0.2)] transition hover:bg-[#f84a30]"
+              className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] px-4 text-xs font-bold text-white shadow-[0_2px_12px_rgba(255,59,0,0.3)] transition-all hover:brightness-105 hover:shadow-[0_4px_16px_rgba(255,59,0,0.4)] cursor-pointer"
             >
               <Plus size={15} strokeWidth={2.4} />
-              New Storefront
+              <span>New Storefront</span>
             </button>
           </div>
         </header>
 
         {/* Loading State */}
         {state === 'loading' && (
-          <div className="grid place-items-center py-28 text-[#6b7280]">
+          <div className="grid place-items-center py-28 text-neutral-400">
             <div className="flex items-center gap-3 text-sm font-medium">
-              <Loader2 size={20} className="animate-spin text-[#FF5840]" />
+              <Loader2 size={20} className="animate-spin text-[#FF3B00]" />
               Loading your projects…
             </div>
           </div>
@@ -297,7 +297,7 @@ export default function ProjectsPage() {
                 <button
                   type="button"
                   onClick={() => window.location.reload()}
-                  className="rounded-xl bg-red-600 px-4 py-2 text-xs font-bold text-white shadow hover:bg-red-700 transition"
+                  className="rounded-xl bg-red-600 px-4 py-2 text-xs font-bold text-white shadow hover:bg-red-700 transition cursor-pointer"
                 >
                   Refresh Page
                 </button>
@@ -310,26 +310,26 @@ export default function ProjectsPage() {
         {state === 'ready' && projects.length === 0 && (
           <div className="space-y-12">
             {/* Hero Interactive Studio Box */}
-            <div className="relative overflow-hidden rounded-3xl border border-[#e8e2de] bg-gradient-to-b from-white via-[#fffbfa] to-[#fff5f2] p-8 sm:p-12 shadow-[0_20px_50px_rgba(15,23,36,0.05)]">
+            <div className="relative overflow-hidden rounded-3xl border border-neutral-200/90 bg-white p-8 sm:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.04)]">
               {/* Decorative Subtle Background Elements */}
-              <div className="pointer-events-none absolute -right-16 -top-16 h-72 w-72 rounded-full bg-[#FF5840]/10 blur-3xl" />
+              <div className="pointer-events-none absolute -right-16 -top-16 h-72 w-72 rounded-full bg-[#FF4500]/10 blur-3xl" />
               <div className="pointer-events-none absolute -left-16 -bottom-16 h-72 w-72 rounded-full bg-amber-400/10 blur-3xl" />
 
               <div className="relative z-10 max-w-3xl">
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#FF5840]/20 bg-[#FFF0EC] px-3.5 py-1 text-xs font-bold text-[#FF5840]">
-                  <Sparkles size={14} />
+                <div className="inline-flex items-center gap-2 rounded-full border border-[#FFCCBC] bg-[#FFF3EE] px-3.5 py-1 text-xs font-bold text-[#FF3B00]">
+                  <Flame size={14} className="fill-[#FF3B00]" />
                   <span>AI SHOPIFY THEME GENERATOR</span>
                 </div>
 
-                <h2 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight text-[#0F1724] leading-tight">
+                <h2 className="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight text-neutral-950 leading-tight">
                   Design and export your first Shopify store in seconds.
                 </h2>
-                <p className="mt-3 text-sm sm:text-base text-[#4B5563] leading-relaxed">
+                <p className="mt-3 text-sm sm:text-base text-neutral-600 leading-relaxed">
                   ShopStudio creates fully responsive Tailwind layouts, customizable Liquid sections, and theme settings ready to publish straight into Shopify Online Store 2.0.
                 </p>
 
                 {/* Quick Generator Box */}
-                <div className="mt-8 rounded-2xl border border-[#e8e2de] bg-white p-5 shadow-[0_10px_30px_rgba(15,23,36,0.04)]">
+                <div className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50/50 p-5 shadow-xs">
                   <div className="mb-3 flex flex-wrap items-center gap-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 mr-1">Vibe:</span>
                     {toneOptions.map((opt) => (
@@ -337,10 +337,10 @@ export default function ProjectsPage() {
                         key={opt.label}
                         type="button"
                         onClick={() => handleSelectTone(opt)}
-                        className={`rounded-full px-3 py-1 text-xs font-semibold transition-all ${
+                        className={`rounded-full px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
                           selectedTone === opt.tone
-                            ? 'bg-[#0F1724] text-white shadow-sm'
-                            : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                            ? 'bg-neutral-950 text-white shadow-xs'
+                            : 'bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-100 hover:text-neutral-950'
                         }`}
                       >
                         {opt.label}
@@ -354,7 +354,7 @@ export default function ProjectsPage() {
                     onChange={(e) => setPrompt(e.target.value)}
                     placeholder="e.g. Create a luxury organic matcha tea storefront with earthy green tones, origin ritual story section, whisking guide modal, and monthly subscription builder..."
                     rows={3}
-                    className="w-full resize-none rounded-xl border border-[#e2dcda] bg-neutral-50/70 p-3.5 text-sm text-[#0F1724] placeholder:text-neutral-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF5840]/30 transition-all"
+                    className="w-full resize-none rounded-xl border border-neutral-200 bg-white p-3.5 text-xs sm:text-sm text-neutral-950 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#FF4500]/30 transition-all font-medium"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
                         e.preventDefault();
@@ -364,8 +364,8 @@ export default function ProjectsPage() {
                   />
 
                   <div className="mt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-neutral-100">
-                    <div className="flex items-center gap-2 text-xs text-neutral-400">
-                      <span className="font-mono bg-neutral-100 px-1.5 py-0.5 rounded border border-neutral-200 text-neutral-600">⌘ + Enter</span>
+                    <div className="flex items-center gap-2 text-xs text-neutral-500">
+                      <span className="font-mono bg-white px-1.5 py-0.5 rounded border border-neutral-200 text-neutral-700 font-bold">⌘ + Enter</span>
                       <span>Generates Home, Product, Collection &amp; Cart</span>
                     </div>
 
@@ -373,7 +373,7 @@ export default function ProjectsPage() {
                       type="button"
                       onClick={() => void handleStartProject()}
                       disabled={submitting || !prompt.trim()}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#FF5840] px-5 py-2.5 text-xs font-bold text-white shadow-[0_8px_18px_rgba(255,88,64,0.25)] transition-all hover:bg-[#f84a30] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#FF3B00] via-[#FF5E00] to-[#FFAA00] px-5 py-2.5 text-xs font-bold text-white shadow-[0_2px_12px_rgba(255,59,0,0.3)] transition-all hover:brightness-105 hover:shadow-[0_4px_16px_rgba(255,59,0,0.4)] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                     >
                       {submitting ? (
                         <span className="flex items-center gap-2">
@@ -382,6 +382,7 @@ export default function ProjectsPage() {
                         </span>
                       ) : (
                         <>
+                          <Sparkles size={14} />
                           <span>Generate Shopify Storefront</span>
                           <ArrowRight size={14} />
                         </>
@@ -400,10 +401,10 @@ export default function ProjectsPage() {
 
             {/* Curated Starter Blueprints */}
             <div>
-              <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <h3 className="text-lg font-bold text-[#0F1724]">Or Start From a Proven Blueprint</h3>
-                  <p className="text-xs text-[#4B5563]">1-Click load curated e-commerce concepts designed for high conversion.</p>
+                  <h3 className="text-lg font-bold text-neutral-950">Or Start From a Proven Blueprint</h3>
+                  <p className="text-xs text-neutral-500">1-Click load curated e-commerce concepts designed for high conversion.</p>
                 </div>
               </div>
 
@@ -417,26 +418,26 @@ export default function ProjectsPage() {
                       promptInputRef.current?.focus();
                       promptInputRef.current?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="group flex flex-col justify-between rounded-2xl border border-[#e8e2de] bg-white p-5 text-left shadow-[0_8px_20px_rgba(15,23,36,0.02)] transition-all duration-200 hover:-translate-y-1 hover:border-[#FF5840]/50 hover:shadow-md"
+                    className="group flex flex-col justify-between rounded-2xl border border-neutral-200/90 bg-white p-5 text-left shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-[#FF5722]/50 hover:shadow-md cursor-pointer"
                   >
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className={`grid h-11 w-11 place-items-center rounded-xl text-2xl border ${item.color}`}>
+                        <span className={`grid h-10 w-10 place-items-center rounded-xl text-xl border ${item.color}`}>
                           {item.emoji}
                         </span>
-                        <span className="text-xs font-bold text-[#FF5840] opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                        <span className="text-xs font-bold text-[#FF3B00] opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
                           Use <ArrowRight size={12} />
                         </span>
                       </div>
                       <span className="mt-3 inline-block text-[10px] font-bold uppercase tracking-wider text-neutral-400">
                         {item.category}
                       </span>
-                      <h4 className="text-sm font-bold text-[#0F1724]">{item.title}</h4>
-                      <p className="mt-1.5 text-xs text-[#4B5563] leading-relaxed line-clamp-2">{item.desc}</p>
+                      <h4 className="text-sm font-bold text-neutral-950">{item.title}</h4>
+                      <p className="mt-1.5 text-xs text-neutral-600 leading-relaxed line-clamp-2">{item.desc}</p>
                     </div>
                     <div className="mt-4 pt-3 border-t border-neutral-100 text-[11px] font-semibold text-neutral-400 flex items-center justify-between">
                       <span>4 Sections • 5 Pages</span>
-                      <span className="font-bold text-[#FF5840]">Load Prompt</span>
+                      <span className="font-bold text-[#FF3B00]">Load Prompt</span>
                     </div>
                   </button>
                 ))}
@@ -444,68 +445,68 @@ export default function ProjectsPage() {
             </div>
 
             {/* How It Works - 3 Pillars */}
-            <div className="rounded-3xl border border-[#e8e2de] bg-white p-8">
+            <div className="rounded-3xl border border-neutral-200/90 bg-white p-8 shadow-xs">
               <div className="text-center max-w-xl mx-auto mb-8">
-                <h3 className="text-xl font-bold text-[#0F1724]">How It Works</h3>
-                <p className="mt-1 text-xs text-[#4B5563]">
+                <h3 className="text-xl font-bold text-neutral-950">How It Works</h3>
+                <p className="mt-1 text-xs text-neutral-500">
                   From natural language prompt to a production-ready Shopify store in 3 simple steps.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                <div className="flex flex-col items-start rounded-2xl bg-[#fffdfc] p-6 border border-[#f0eae6]">
-                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#FFF0EC] text-[#FF5840] font-bold text-sm">
+                <div className="flex flex-col items-start rounded-2xl bg-neutral-50/50 p-6 border border-neutral-200/80">
+                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#FFF3EE] text-[#FF3B00] font-bold text-xs border border-[#FFCCBC]">
                     01
                   </span>
-                  <h4 className="mt-4 text-sm font-bold text-[#0F1724] flex items-center gap-2">
-                    <Sparkles size={16} className="text-[#FF5840]" /> Prompt to Storefront
+                  <h4 className="mt-4 text-sm font-bold text-neutral-950 flex items-center gap-2">
+                    <Sparkles size={16} className="text-[#FF3B00]" /> Prompt to Storefront
                   </h4>
-                  <p className="mt-2 text-xs text-[#4B5563] leading-relaxed">
+                  <p className="mt-2 text-xs text-neutral-600 leading-relaxed">
                     AI analyzes your niche, generates responsive layouts, curated color palettes, and full product showcases with real-time streaming preview.
                   </p>
                 </div>
 
-                <div className="flex flex-col items-start rounded-2xl bg-[#fffdfc] p-6 border border-[#f0eae6]">
-                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#F0E9FF] text-[#885CF8] font-bold text-sm">
+                <div className="flex flex-col items-start rounded-2xl bg-neutral-50/50 p-6 border border-neutral-200/80">
+                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#F0E9FF] text-[#8B5CF8] font-bold text-xs border border-[#DDD6FE]">
                     02
                   </span>
-                  <h4 className="mt-4 text-sm font-bold text-[#0F1724] flex items-center gap-2">
-                    <Sliders size={16} className="text-[#885CF8]" /> Visual Inline Studio
+                  <h4 className="mt-4 text-sm font-bold text-neutral-950 flex items-center gap-2">
+                    <Sliders size={16} className="text-[#8B5CF8]" /> Visual Inline Studio
                   </h4>
-                  <p className="mt-2 text-xs text-[#4B5563] leading-relaxed">
+                  <p className="mt-2 text-xs text-neutral-600 leading-relaxed">
                     Select any section or heading directly in the sandbox iframe. Request AI refinements, swap imagery via ImageKit, or adjust styling on the fly.
                   </p>
                 </div>
 
-                <div className="flex flex-col items-start rounded-2xl bg-[#fffdfc] p-6 border border-[#f0eae6]">
-                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#EAFFEF] text-[#22CC58] font-bold text-sm">
+                <div className="flex flex-col items-start rounded-2xl bg-neutral-50/50 p-6 border border-neutral-200/80">
+                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#ECFDF5] text-[#10B981] font-bold text-xs border border-[#A7F3D0]">
                     03
                   </span>
-                  <h4 className="mt-4 text-sm font-bold text-[#0F1724] flex items-center gap-2">
-                    <Download size={16} className="text-[#22CC58]" /> 1-Click Shopify Export
+                  <h4 className="mt-4 text-sm font-bold text-neutral-950 flex items-center gap-2">
+                    <Download size={16} className="text-[#10B981]" /> 1-Click Shopify Export
                   </h4>
-                  <p className="mt-2 text-xs text-[#4B5563] leading-relaxed">
+                  <p className="mt-2 text-xs text-neutral-600 leading-relaxed">
                     Convert your designs to 100% compliant Shopify Liquid sections, schemas, and JSON templates. Download the ZIP and upload directly to Shopify Admin.
                   </p>
                 </div>
               </div>
 
               {/* Trust Badges */}
-              <div className="mt-8 pt-6 border-t border-[#f0eae6] flex flex-wrap items-center justify-around gap-4 text-xs font-semibold text-[#4B5563]">
+              <div className="mt-8 pt-6 border-t border-neutral-100 flex flex-wrap items-center justify-around gap-4 text-xs font-semibold text-neutral-600">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-[#22CC58]" />
+                  <CheckCircle2 size={16} className="text-[#10B981]" />
                   <span>Shopify Online Store 2.0 Ready</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-[#22CC58]" />
+                  <CheckCircle2 size={16} className="text-[#10B981]" />
                   <span>Zero Vendor Lock-in (Standard ZIP)</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-[#22CC58]" />
+                  <CheckCircle2 size={16} className="text-[#10B981]" />
                   <span>ImageKit AI Asset Transformations</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-[#22CC58]" />
+                  <CheckCircle2 size={16} className="text-[#10B981]" />
                   <span>Mobile &amp; Desktop Optimized</span>
                 </div>
               </div>
@@ -515,19 +516,19 @@ export default function ProjectsPage() {
 
         {/* Empty Search Results State */}
         {state === 'ready' && projects.length > 0 && filteredProjects.length === 0 && (
-          <div className="grid place-items-center rounded-3xl border border-dashed border-[#e2dcda] bg-white py-16 px-6 text-center">
+          <div className="grid place-items-center rounded-3xl border border-dashed border-neutral-200 bg-white py-16 px-6 text-center">
             <div className="flex flex-col items-center gap-3 max-w-sm">
               <span className="grid h-12 w-12 place-items-center rounded-2xl bg-neutral-100 text-neutral-400">
                 <Search size={22} />
               </span>
-              <h3 className="text-base font-bold text-[#0F1724]">No storefronts found</h3>
-              <p className="text-xs text-[#4B5563]">
+              <h3 className="text-base font-bold text-neutral-950">No storefronts found</h3>
+              <p className="text-xs text-neutral-500">
                 No projects matched your search query &quot;<strong>{searchQuery}</strong>&quot;.
               </p>
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="mt-2 inline-flex items-center gap-2 rounded-xl bg-neutral-100 px-4 py-2 text-xs font-bold text-[#0F1724] hover:bg-neutral-200"
+                className="mt-2 inline-flex items-center gap-2 rounded-xl bg-neutral-100 px-4 py-2 text-xs font-bold text-neutral-950 hover:bg-neutral-200 cursor-pointer"
               >
                 Clear Search Filter
               </button>
@@ -559,9 +560,9 @@ function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       href={`/editor/${project.id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-[#eee7e3] bg-white shadow-[0_10px_24px_rgba(31,41,55,0.035)] transition-all duration-300 hover:-translate-y-1 hover:border-[#ffd4c7] hover:shadow-[0_16px_32px_rgba(31,41,55,0.08)]"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-neutral-200/90 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-[#FF5722]/50 hover:shadow-md"
     >
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#f6f2ef]">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-100">
         {project.thumbnail_url ? (
           // eslint-disable-next-line @next/next/no-img-element -- remote InsForge Storage URL, not optimizable at build time.
           <img
@@ -571,28 +572,28 @@ function ProjectCard({ project }: { project: Project }) {
             loading="lazy"
           />
         ) : (
-          <div className="grid h-full w-full place-items-center text-[#c3bcb6]">
+          <div className="grid h-full w-full place-items-center text-neutral-400">
             <div className="flex flex-col items-center gap-2">
               <ImageOff size={24} strokeWidth={1.6} />
               <span className="text-xs font-medium">Ready in Editor</span>
             </div>
           </div>
         )}
-        <div className="absolute top-2.5 right-2.5 rounded-md bg-black/60 backdrop-blur-md px-2 py-0.5 text-[10px] font-bold text-white">
+        <div className="absolute top-2.5 right-2.5 rounded-md bg-neutral-950/80 backdrop-blur-md px-2 py-0.5 text-[10px] font-bold text-white border border-white/10">
           Shopify OS 2.0
         </div>
       </div>
 
       <div className="flex flex-1 flex-col p-4">
-        <h3 className="line-clamp-1 text-sm font-bold text-[#111827] group-hover:text-[#FF5840] transition-colors">
+        <h3 className="line-clamp-1 text-sm font-bold text-neutral-950 group-hover:text-[#FF3B00] transition-colors">
           {project.name}
         </h3>
-        <p className="mt-1 text-xs text-[#6b7280] line-clamp-2 leading-relaxed">
+        <p className="mt-1 text-xs text-neutral-600 line-clamp-2 leading-relaxed">
           {project.prompt || 'Custom Shopify Theme generated by ShopStudio'}
         </p>
-        <div className="mt-auto pt-3 flex items-center justify-between text-[11px] font-medium text-[#9aa2af] border-t border-[#f6f2ef]">
+        <div className="mt-auto pt-3 flex items-center justify-between text-[11px] font-medium text-neutral-400 border-t border-neutral-100">
           <span>Created {formatCreatedAt(project.created_at)}</span>
-          <span className="font-semibold text-[#FF5840] flex items-center gap-1">
+          <span className="font-bold text-[#FF3B00] flex items-center gap-1">
             Open Editor <ArrowRight size={12} />
           </span>
         </div>
@@ -600,3 +601,4 @@ function ProjectCard({ project }: { project: Project }) {
     </Link>
   );
 }
+
