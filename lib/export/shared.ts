@@ -62,6 +62,11 @@ export function uniqueFileBases(pages: ExportPage[]): Map<string, string> {
  */
 export function waitForImages(doc: Document, timeoutMs = 12000): Promise<void> {
   const imgs = Array.from(doc.images);
+  for (const img of imgs) {
+    if (img.loading === 'lazy') {
+      img.loading = 'eager';
+    }
+  }
   const pending = imgs
     .filter((img) => !(img.complete && img.naturalWidth > 0))
     .map(
