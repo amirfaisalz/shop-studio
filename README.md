@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="100%" alt="ShopStudio Banner" src="https://github.com/user-attachments/assets/d5777d9a-9ec1-47fe-a4ac-dcc6f8b8f074" />
+<img width="100%" alt="ShopStudio Landing Page" src="./public/images/landing-screenshot.png" />
 
 # ShopStudio ⚡
 
