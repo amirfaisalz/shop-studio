@@ -85,12 +85,19 @@ async function capturePageThumbnail(html: string, themeCss: string): Promise<Blo
         style: { margin: '0' },
         skipFonts: true,
         imagePlaceholder:
-          'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="%23f1ede9"/>',
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAAtlasBTAAAAAElFTkSuQmCC',
       });
     }
 
-    const res = await fetch(dataUrl);
-    return await res.blob();
+    const parts = dataUrl.split(',');
+    const mimeMatch = parts[0]?.match(/:(.*?);/);
+    const mime = mimeMatch ? mimeMatch[1] : 'image/png';
+    const binaryString = atob(parts[1] || '');
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return new Blob([bytes], { type: mime });
   } finally {
     iframe.remove();
   }

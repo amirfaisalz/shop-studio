@@ -116,7 +116,14 @@ export default function EditorTopBar({
         );
       });
     } catch (err) {
-      setExportError(err instanceof Error ? err.message : 'PNG export failed. Please try again.');
+      console.error('[png-export] error:', err);
+      const message =
+        err instanceof Error
+          ? err.message
+          : typeof err === 'object' && err !== null && 'type' in err
+            ? `Failed to render page (${String((err as { type?: unknown }).type)} event)`
+            : String(err || 'PNG export failed. Please try again.');
+      setExportError(message);
     } finally {
       setBusy(null);
       setPngStatus('');
