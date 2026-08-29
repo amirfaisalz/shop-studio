@@ -2,7 +2,7 @@
 
 <img width="100%" alt="ShopStudio Landing Page" src="./public/images/landing-screenshot.png" />
 
-# ShopStudio ⚡
+# ShopStudio
 
 **The AI-Powered Shopify Online Store 2.0 Theme Builder & SaaS**
 
@@ -20,7 +20,7 @@
 
 </div>
 
-## 📖 Overview
+## Overview
 
 **ShopStudio** is a SaaS platform that bridges the gap between AI generation and actual e-commerce engineering. Unlike generic web generators that produce static HTML, ShopStudio generates **native Shopify Online Store 2.0** architecture:
 
@@ -31,14 +31,14 @@
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🚀 1. Prompt-to-Storefront Generation
+### 1. Prompt-to-Storefront Generation
 - Enter a brand description, niche, or vibe (e.g. *“Minimalist Japanese Ceramic Studio”*).
 - AI structures the project brief, color palette, typography tokens, and section hierarchy.
 - Real-time page generation across **Home**, **Product**, **Collection**, **Cart**, and **Custom** pages.
 
-### 🤖 2. Multi-Model AI Engine (Provider-Independent)
+### 2. Multi-Model AI Engine (Provider-Independent)
 - **Select AI Model Anytime**: Switch models on the **Dashboard**, **Projects directory**, or directly in the **Editor**.
 - **Supported Providers & Models**:
   - **Google Gemini**: `gemini-2.5-pro`, `gemini-2.5-flash`, `gemini-2.0-flash`.
@@ -48,40 +48,40 @@
   - **Custom Endpoints**: Connect any OpenAI-compatible API (Ollama, vLLM, LocalAI, Groq).
 - **In-Browser Model Settings**: Users can provide their own custom API keys and custom base URLs securely stored in local storage.
 
-### 👁️ 3. Live Sandboxed Visual Preview
+### 3. Live Sandboxed Visual Preview
 - Interactive, responsive preview with **Desktop**, **Tablet**, and **Mobile** viewports.
 - Isolated preview rendering ensuring high security and accurate CSS isolation.
 
-### ✏️ 4. Scoped Inline & AI Editing
+### 4. Scoped Inline & AI Editing
 - **Click-to-Select**: Click any section or element to inspect and edit.
 - **AI Chat Refinement**: Request pinpoint adjustments (e.g. *"Change hero button to pill shape and make heading bolder"*).
 - **Atomic Revisions**: Every edit creates a reversible revision with full undo/redo history.
 
-### 🛍️ 5. Native Shopify Online Store 2.0 Compliance
+### 5. Native Shopify Online Store 2.0 Compliance
 - Converts Tailwind and HTML designs into valid Liquid code.
 - Generates editable settings (color pickers, text fields, image pickers, range sliders).
 - Integrates repeatable block structures for feature grids, testimonials, and collection cards.
 
-### 📦 6. 1-Click ZIP Theme Export
+### 6. 1-Click ZIP Theme Export
 - Validates JSON schemas, Liquid syntax, and asset references.
 - Packages everything into a standard Shopify theme directory structure.
 - Download the ZIP or save it to InsForge storage for team sharing.
 
-### 🗂️ 7. Full Storefront Lifecycle & Project Management
+### 7. Full Storefront Lifecycle & Project Management
 - Search, preview, open, and permanently delete projects with cascade cleanup.
 - Real-time project quotas and plan limits with seamless upgrade modals.
 
-### 🖼️ 8. Zero-Config Media & ImageKit Pipeline
+### 8. Zero-Config Media & ImageKit Pipeline
 - Instant zero-config curated photography from verified Unsplash collections with automatic CORS resilience.
 - Optional **ImageKit** text-to-image (`ik-genimg`) and AI image transformations (background removal, upscaling, retouching).
 
-### 💳 9. Flexible Monetization & Dev Pro Bypass
+### 9. Flexible Monetization & Dev Pro Bypass
 - Built-in **Stripe** subscription tiers (Starter, Pro, Agency) with customer billing portal.
 - **Dev Pro Bypass**: CLI tool (`bun run make-pro <email>`) and `NEXT_PUBLIC_ENABLE_FREE_PRO=true` flag to unlock Pro features without Stripe.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -97,7 +97,7 @@
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 ├── app/
@@ -137,7 +137,7 @@
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Prerequisites
 - **Bun** (v1.0 or newer) — [Install Bun](https://bun.sh/)
@@ -221,7 +221,7 @@ Open [http://localhost:3231](http://localhost:3231) in your browser.
 
 ---
 
-## ⌨️ Useful Commands
+## Useful Commands
 
 ```bash
 # Start development server on port 3231
@@ -245,17 +245,17 @@ bun run db:migrate
 
 ---
 
-## 📚 Documentation & Guides
+## Documentation & Guides
 
 For deeper implementation details, refer to:
-- 📖 [Project Setup Guide](./projectsetup.md)
-- 💳 [Billing & Stripe Configuration](./docs/billing-setup.md)
-- 🛍️ [Shopify Export & Bucket Setup](./docs/shopify-export-setup.md)
-- 🖼️ [Project Thumbnails Setup](./docs/projects-thumbnails-setup.md)
-- 🤖 [Engineering & Agent Rules](./AGENTS.md)
+- [Project Setup Guide](./projectsetup.md)
+- [Billing & Stripe Configuration](./docs/billing-setup.md)
+- [Shopify Export & Bucket Setup](./docs/shopify-export-setup.md)
+- [Project Thumbnails Setup](./docs/projects-thumbnails-setup.md)
+- [Engineering & Agent Rules](./AGENTS.md)
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](./LICENSE).
