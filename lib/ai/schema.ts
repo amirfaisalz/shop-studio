@@ -45,6 +45,17 @@ export const themeSpecSchema = z.object({
 
 export type ThemeSpec = z.infer<typeof themeSpecSchema>;
 
+export const aiConfigSchema = z
+  .object({
+    provider: z.enum(['gemini', 'deepseek', 'openrouter', 'openai', 'custom']).optional(),
+    model: z.string().max(120).optional(),
+    apiKey: z.string().max(300).optional(),
+    baseUrl: z.string().max(300).optional(),
+  })
+  .optional();
+
+export type AIConfigPayload = z.infer<typeof aiConfigSchema>;
+
 /** Body of a POST to `/api/ai`. */
 export const aiRequestSchema = z.object({
   messages: z.array(chatMessageSchema).min(1).max(50),
@@ -60,6 +71,8 @@ export const aiRequestSchema = z.object({
    * HTML is sent to keep the payload small.
    */
   activePageHtml: z.string().max(200_000).nullish(),
+  /** Client-configured AI provider/model selection (e.g. DeepSeek, OpenRouter, etc.). */
+  aiConfig: aiConfigSchema,
 });
 
 export type AIRequest = z.infer<typeof aiRequestSchema>;
@@ -217,6 +230,7 @@ export const shopifySectionsRequestSchema = z.object({
   brandName: z.string().min(1).max(80),
   styleGuide: z.string().max(6000).nullish(),
   sections: z.array(shopifySectionInputSchema).min(1).max(40),
+  aiConfig: aiConfigSchema,
 });
 
 export type ShopifySectionsRequest = z.infer<typeof shopifySectionsRequestSchema>;

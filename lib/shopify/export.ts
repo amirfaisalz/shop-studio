@@ -17,6 +17,8 @@ import type { ExportPage, ExportProgress, ExportStepId } from './types';
  * the dialog can offer a retry.
  */
 
+import type { AIClientConfig } from '@/lib/ai/models';
+
 export interface RunExportInput {
   projectId: string;
   projectName: string;
@@ -24,6 +26,7 @@ export interface RunExportInput {
   themeCss: string;
   /** The project's shared style guide, so AI section conversion stays on-brand. */
   styleGuide?: string | null;
+  aiConfig?: AIClientConfig;
   onProgress?: (progress: ExportProgress) => void;
 }
 
@@ -93,6 +96,7 @@ export async function runShopifyExport(input: RunExportInput): Promise<RunExport
     pages,
     brandName: input.projectName || 'AI Storefront',
     styleGuide: input.styleGuide ?? null,
+    aiConfig: input.aiConfig,
     onProgress: ({ processed, total }) => {
       const ratio = total > 0 ? processed / total : 1;
       input.onProgress?.({

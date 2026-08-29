@@ -22,11 +22,11 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) {
     return Response.json({ error: 'Invalid request.' }, { status: 400 });
   }
-  const { brandName, styleGuide, sections } = parsed.data;
+  const { brandName, styleGuide, sections, aiConfig } = parsed.data;
 
   let provider;
   try {
-    provider = getAIProvider();
+    provider = getAIProvider(aiConfig);
   } catch (err) {
     return Response.json(
       { error: err instanceof Error ? err.message : 'AI provider unavailable.' },

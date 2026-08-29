@@ -214,10 +214,10 @@ async function* streamWithRetry(
   throw new Error(formatAIErrorMessage(lastError));
 }
 
-export function createGeminiProvider(model: string): AIProvider {
-  const apiKey = process.env.GEMINI_API_KEY;
+export function createGeminiProvider(model: string, customApiKey?: string): AIProvider {
+  const apiKey = customApiKey || process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error('GEMINI_API_KEY is not set. Add it to .env.local.');
+    throw new Error('GEMINI_API_KEY is not set. Please provide one in settings or add GEMINI_API_KEY to .env.local.');
   }
   const ai = new GoogleGenAI({ apiKey });
 
