@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start -p 3231",
     "lint": "eslint",
+    "make-pro": "bun run scripts/set-pro-user.ts",
     "db:migrate": "npx @insforge/cli db import migrations/schema.sql"
   },
   "dependencies": {

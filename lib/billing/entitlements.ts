@@ -11,8 +11,16 @@ import type { Entitlement, Subscription, SubscriptionStatus } from './types';
 /** Statuses that grant paid access. `past_due` keeps access during the grace period. */
 const ACTIVE_STATUSES: SubscriptionStatus[] = ['active', 'trialing', 'past_due'];
 
+function isFreeProBypassEnabled(): boolean {
+  return (
+    process.env.NEXT_PUBLIC_ENABLE_FREE_PRO === 'true' ||
+    process.env.ENABLE_FREE_PRO === 'true'
+  );
+}
+
 /** Whether a subscription grants paid access right now. */
 export function subscriptionIsActive(sub: Subscription | null): boolean {
+  if (isFreeProBypassEnabled()) return true;
   if (!sub) return false;
   return isPaidPlan(sub.plan) && ACTIVE_STATUSES.includes(sub.status);
 }
@@ -25,8 +33,9 @@ export function computeEntitlement(
   sub: Subscription | null,
   projectCount: number
 ): Entitlement {
-  const active = subscriptionIsActive(sub);
-  const planId = active && sub ? sub.plan : 'free';
+  const isBypass = isFreeProBypassEnabled();
+  const active = isBypass || subscriptionIsActive(sub);
+  const planId = isBypass ? 'yearly' : active && sub ? sub.plan : 'free';
   const plan = getPlan(planId);
 
   const remaining =
@@ -36,7 +45,7 @@ export function computeEntitlement(
 
   return {
     plan: planId,
-    status: sub?.status ?? 'free',
+    status: isBypass ? 'active' : sub?.status ?? 'free',
     isPaid: active,
     maxProjects: plan.maxProjects,
     projectCount,

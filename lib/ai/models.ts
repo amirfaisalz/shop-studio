@@ -85,6 +85,14 @@ export const AI_MODELS: AIModelDefinition[] = [
     contextWindow: '64k',
   },
   {
+    id: 'DeepSeek-V4-Flash-0731',
+    name: 'DeepSeek V4 Flash (0731)',
+    provider: 'deepseek',
+    description: 'High-speed DeepSeek V4 Flash model for rapid storefront generation and responsive layouts.',
+    badge: 'Fast',
+    contextWindow: '128k',
+  },
+  {
     id: 'deepseek-reasoner',
     name: 'DeepSeek R1',
     provider: 'deepseek',

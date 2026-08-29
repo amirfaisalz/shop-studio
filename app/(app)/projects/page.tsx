@@ -22,6 +22,8 @@ import { useSubscription } from '@/components/billing/SubscriptionProvider';
 import { listProjects, createProject, ProjectLimitError, type Project } from '@/lib/projects';
 import { ensureProjectThumbnail } from '@/lib/thumbnail';
 import UpgradeDialog from '@/components/billing/UpgradeDialog';
+import AIModelSelector from '@/components/editor/AIModelSelector';
+import { type AIClientConfig, DEFAULT_AI_CONFIG } from '@/lib/ai/models';
 
 type LoadState = 'loading' | 'ready' | 'error';
 
@@ -87,6 +89,7 @@ export default function ProjectsPage() {
   const [state, setState] = useState<LoadState>('loading');
   const [loadError, setLoadError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [aiConfig, setAiConfig] = useState<AIClientConfig>(DEFAULT_AI_CONFIG);
 
   // Inline Quick Generator State for Empty State
   const [prompt, setPrompt] = useState('');
@@ -96,6 +99,36 @@ export default function ProjectsPage() {
   const [upgradeOpen, setUpgradeOpen] = useState(false);
 
   const promptInputRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        if (typeof window === 'undefined') return;
+        const saved = localStorage.getItem('shopstudio_ai_config');
+        if (saved && active) {
+          const parsed = JSON.parse(saved) as AIClientConfig;
+          if (parsed && typeof parsed === 'object') {
+            setAiConfig(parsed);
+          }
+        }
+      } catch {
+        // ignore
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const handleAiConfigChange = (newConfig: AIClientConfig) => {
+    setAiConfig(newConfig);
+    try {
+      localStorage.setItem('shopstudio_ai_config', JSON.stringify(newConfig));
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     if (authLoading || !user) return;
@@ -197,6 +230,9 @@ export default function ProjectsPage() {
         : raw;
 
     try {
+      try {
+        localStorage.setItem('shopstudio_ai_config', JSON.stringify(aiConfig));
+      } catch {}
       const project = await createProject(finalPrompt);
       router.push(`/editor/${project.id}`);
     } catch (err) {
@@ -252,6 +288,14 @@ export default function ProjectsPage() {
                 )}
               </div>
             )}
+
+            <AIModelSelector
+              config={aiConfig}
+              onChange={handleAiConfigChange}
+              disabled={submitting}
+              placement="bottom"
+              align="right"
+            />
 
             <button
               onClick={() => {
@@ -330,22 +374,35 @@ export default function ProjectsPage() {
 
                 {/* Quick Generator Box */}
                 <div className="mt-8 rounded-2xl border border-neutral-200 bg-neutral-50/50 p-5 shadow-xs">
-                  <div className="mb-3 flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 mr-1">Vibe:</span>
-                    {toneOptions.map((opt) => (
-                      <button
-                        key={opt.label}
-                        type="button"
-                        onClick={() => handleSelectTone(opt)}
-                        className={`rounded-full px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
-                          selectedTone === opt.tone
-                            ? 'bg-neutral-950 text-white shadow-xs'
-                            : 'bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-100 hover:text-neutral-950'
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-xs font-bold uppercase tracking-wider text-neutral-400 mr-1">Vibe:</span>
+                      {toneOptions.map((opt) => (
+                        <button
+                          key={opt.label}
+                          type="button"
+                          onClick={() => handleSelectTone(opt)}
+                          className={`rounded-full px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
+                            selectedTone === opt.tone
+                              ? 'bg-neutral-950 text-white shadow-xs'
+                              : 'bg-white text-neutral-600 border border-neutral-200 hover:bg-neutral-100 hover:text-neutral-950'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider hidden sm:inline">Model:</span>
+                      <AIModelSelector
+                        config={aiConfig}
+                        onChange={handleAiConfigChange}
+                        disabled={submitting}
+                        placement="bottom"
+                        align="right"
+                      />
+                    </div>
                   </div>
 
                   <textarea
