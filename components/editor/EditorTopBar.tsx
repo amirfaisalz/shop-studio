@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   ChevronDown,
   ChevronLeft,
@@ -15,9 +16,11 @@ import {
   Undo2,
   Flame,
   CheckCircle2,
+  Trash2,
 } from 'lucide-react';
 import { useBuilder } from './BuilderContext';
 import ExportDialog from './ExportDialog';
+import DeleteProjectDialog from '@/components/projects/DeleteProjectDialog';
 import { useSubscription } from '@/components/billing/SubscriptionProvider';
 import UpgradeDialog from '@/components/billing/UpgradeDialog';
 import { exportPagesAsCodeZip } from '@/lib/export/code';
@@ -37,6 +40,7 @@ export default function EditorTopBar({
   projectId,
   projectName,
 }: EditorTopBarProps) {
+  const router = useRouter();
   const {
     pages,
     themeCss,
@@ -52,6 +56,7 @@ export default function EditorTopBar({
   const { entitlement } = useSubscription();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [savedBadge, setSavedBadge] = useState(false);
   // Which direct export (code/png) is currently running, plus any last error.
@@ -178,6 +183,14 @@ export default function EditorTopBar({
           <span className="rounded-md bg-[#FFF3EE] px-1.5 py-0.5 text-[10px] font-bold text-[#FF3B00] border border-[#FFCCBC]">
             OS 2.0
           </span>
+          <button
+            type="button"
+            onClick={() => setDeleteDialogOpen(true)}
+            title="Delete this storefront"
+            className="grid h-6 w-6 place-items-center rounded-md text-neutral-400 hover:bg-red-50 hover:text-red-600 transition cursor-pointer"
+          >
+            <Trash2 size={13} />
+          </button>
         </div>
 
         <button
@@ -328,6 +341,16 @@ export default function EditorTopBar({
         aiConfig={aiConfig}
       />
 
+      <DeleteProjectDialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        projectId={projectId}
+        projectName={projectName}
+        onDeleted={() => {
+          router.push('/projects');
+        }}
+      />
+
       <UpgradeDialog
         open={upgradeOpen}
         onClose={() => setUpgradeOpen(false)}
@@ -337,4 +360,3 @@ export default function EditorTopBar({
     </header>
   );
 }
-

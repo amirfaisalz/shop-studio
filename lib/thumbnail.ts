@@ -28,6 +28,9 @@ const CAPTURE_HEIGHT = 900;
 /** Downscale factor → a ~600px-wide PNG, plenty for a card. */
 const PIXEL_RATIO = 0.5;
 
+const SAFE_PLACEHOLDER =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAAtlasBTAAAAAElFTkSuQmCC';
+
 /** Render page HTML in an offscreen iframe and rasterize its top to a PNG Blob. */
 async function capturePageThumbnail(html: string, themeCss: string): Promise<Blob> {
   const tailwindCss = await loadTailwindCss();
@@ -46,19 +49,44 @@ async function capturePageThumbnail(html: string, themeCss: string): Promise<Blo
 
   document.body.appendChild(iframe);
   try {
-    await new Promise<void>((resolve, reject) => {
-      iframe.addEventListener('load', () => resolve(), { once: true });
-      iframe.addEventListener('error', () => reject(new Error('Failed to render preview.')), {
-        once: true,
-      });
+    await new Promise<void>((resolve) => {
+      let settled = false;
+      const done = () => {
+        if (!settled) {
+          settled = true;
+          resolve();
+        }
+      };
+      iframe.addEventListener('load', done, { once: true });
+      // Fallback timeout in case load event was already fired or delayed
+      setTimeout(done, 1200);
     });
 
     const doc = iframe.contentDocument;
     if (!doc || !doc.body) throw new Error('Could not access the rendered preview.');
 
-    await waitForImages(doc);
+    await waitForImages(doc, 3000);
     // Let layout settle after images resolve (reflow of intrinsic sizes).
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    // Ensure all <svg> tags have xmlns so XMLSerializer outputs valid standalone SVG markup.
+    const svgs = Array.from(doc.querySelectorAll('svg'));
+    for (const svg of svgs) {
+      if (!svg.getAttribute('xmlns')) {
+        svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      }
+    }
+
+    // Remove any invalid XML attribute names (e.g. Tailwind bracket syntax like stroke-[#C85A32])
+    const allElements = Array.from(doc.querySelectorAll('*'));
+    for (const el of allElements) {
+      const attrs = Array.from(el.attributes);
+      for (const attr of attrs) {
+        if (/[^a-zA-Z0-9_\-:]/.test(attr.name)) {
+          el.removeAttribute(attr.name);
+        }
+      }
+    }
 
     const height = Math.min(
       CAPTURE_HEIGHT,
@@ -74,18 +102,18 @@ async function capturePageThumbnail(html: string, themeCss: string): Promise<Blo
         pixelRatio: PIXEL_RATIO,
         style: { margin: '0' },
         skipFonts: true,
+        imagePlaceholder: SAFE_PLACEHOLDER,
       });
     } catch {
-      // If html-to-image failed due to external CORS images, retry with safe placeholder
+      // If html-to-image failed, retry with extra clean fallback
       dataUrl = await toPng(doc.body, {
         width: RENDER_WIDTH,
-        height,
+        height: Math.min(height, 600),
         backgroundColor: '#ffffff',
-        pixelRatio: PIXEL_RATIO,
+        pixelRatio: 0.3,
         style: { margin: '0' },
         skipFonts: true,
-        imagePlaceholder:
-          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAAtlasBTAAAAAElFTkSuQmCC',
+        imagePlaceholder: SAFE_PLACEHOLDER,
       });
     }
 

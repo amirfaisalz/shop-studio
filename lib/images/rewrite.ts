@@ -77,7 +77,7 @@ const CURATED_UNSPLASH_TOPICS: { keywords: string[]; photos: string[] }[] = [
       'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=1200&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&auto=format&fit=crop&q=80',
       'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=1200&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1608248597359-e93297a5b358?w=1200&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=1200&auto=format&fit=crop&q=80',
     ],
   },
   {

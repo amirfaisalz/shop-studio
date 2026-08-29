@@ -38,32 +38,46 @@
 - AI structures the project brief, color palette, typography tokens, and section hierarchy.
 - Real-time page generation across **Home**, **Product**, **Collection**, **Cart**, and **Custom** pages.
 
-### 👁️ 2. Live Sandboxed Visual Preview
+### 🤖 2. Multi-Model AI Engine (Provider-Independent)
+- **Select AI Model Anytime**: Switch models on the **Dashboard**, **Projects directory**, or directly in the **Editor**.
+- **Supported Providers & Models**:
+  - **Google Gemini**: `gemini-2.5-pro`, `gemini-2.5-flash`, `gemini-2.0-flash`.
+  - **DeepSeek**: `deepseek-chat` (V3), `deepseek-reasoner` (R1), `DeepSeek-V4-Flash-0731`.
+  - **OpenRouter**: Access Claude 3.7 Sonnet, DeepSeek R1, Llama 3.3, and 200+ models.
+  - **OpenAI**: `gpt-4.5-preview`, `gpt-4o`, `gpt-4o-mini`, `o3-mini`.
+  - **Custom Endpoints**: Connect any OpenAI-compatible API (Ollama, vLLM, LocalAI, Groq).
+- **In-Browser Model Settings**: Users can provide their own custom API keys and custom base URLs securely stored in local storage.
+
+### 👁️ 3. Live Sandboxed Visual Preview
 - Interactive, responsive preview with **Desktop**, **Tablet**, and **Mobile** viewports.
 - Isolated preview rendering ensuring high security and accurate CSS isolation.
 
-### ✏️ 3. Scoped Inline & AI Editing
+### ✏️ 4. Scoped Inline & AI Editing
 - **Click-to-Select**: Click any section or element to inspect and edit.
 - **AI Chat Refinement**: Request pinpoint adjustments (e.g. *"Change hero button to pill shape and make heading bolder"*).
 - **Atomic Revisions**: Every edit creates a reversible revision with full undo/redo history.
 
-### 🛍️ 4. Native Shopify Online Store 2.0 Compliance
+### 🛍️ 5. Native Shopify Online Store 2.0 Compliance
 - Converts Tailwind and HTML designs into valid Liquid code.
 - Generates editable settings (color pickers, text fields, image pickers, range sliders).
 - Integrates repeatable block structures for feature grids, testimonials, and collection cards.
 
-### 📦 5. 1-Click ZIP Theme Export
+### 📦 6. 1-Click ZIP Theme Export
 - Validates JSON schemas, Liquid syntax, and asset references.
 - Packages everything into a standard Shopify theme directory structure.
 - Download the ZIP or save it to InsForge storage for team sharing.
 
-### 🖼️ 6. ImageKit Asset Pipeline
-- Automatic image optimization, responsive delivery, and AI asset transformations.
-- Safe public delivery with fallback presets.
+### 🗂️ 7. Full Storefront Lifecycle & Project Management
+- Search, preview, open, and permanently delete projects with cascade cleanup.
+- Real-time project quotas and plan limits with seamless upgrade modals.
 
-### 💳 7. Stripe Billing & Usage Tiers
-- Built-in subscription tiers (Starter, Pro, Agency) with project quotas.
-- Customer billing portal and secure webhook synchronization.
+### 🖼️ 8. Zero-Config Media & ImageKit Pipeline
+- Instant zero-config curated photography from verified Unsplash collections with automatic CORS resilience.
+- Optional **ImageKit** text-to-image (`ik-genimg`) and AI image transformations (background removal, upscaling, retouching).
+
+### 💳 9. Flexible Monetization & Dev Pro Bypass
+- Built-in **Stripe** subscription tiers (Starter, Pro, Agency) with customer billing portal.
+- **Dev Pro Bypass**: CLI tool (`bun run make-pro <email>`) and `NEXT_PUBLIC_ENABLE_FREE_PRO=true` flag to unlock Pro features without Stripe.
 
 ---
 
@@ -75,10 +89,10 @@
 | **Frontend** | React 19, TypeScript (Strict Mode), Lucide Icons |
 | **Styling** | Tailwind CSS v4, `@tailwindcss/postcss` |
 | **Runtime & PM** | **Bun** (`bun dev`, `bun install`, `bun build`) |
-| **AI Gateway** | Google Gemini (via `@google/genai`, provider-independent adapter) |
+| **AI Providers** | Multi-Provider Engine (Gemini, DeepSeek, OpenRouter, OpenAI, Custom) |
 | **Backend & DB** | InsForge (PostgreSQL, Auth, Row-Level Security, File Storage) |
-| **Media & CDN** | ImageKit (Optimization, AI Generation, CDN URLs) |
-| **Payments** | Stripe (Checkout Sessions, Customer Portal, Webhooks) |
+| **Media & CDN** | ImageKit & Curated Unsplash CDN Pipeline |
+| **Payments** | Stripe (Checkout, Customer Portal, Webhooks) & Local CLI Upgrade |
 | **Validation** | Zod Schema Validation |
 
 ---
@@ -88,15 +102,15 @@
 ```text
 ├── app/
 │   ├── (app)/                  # Protected application pages
-│   │   ├── dashboard/          # Project overview and quick start
-│   │   ├── projects/           # Project gallery & creation
+│   │   ├── dashboard/          # Project overview, model picker & quick start
+│   │   ├── projects/           # Project directory, search & deletion
 │   │   ├── billing/            # Plans, subscription & usage
 │   │   └── design-system/      # UI tokens & component showcase
 │   ├── (auth)/                 # Authentication flows
 │   │   ├── sign-in/            # User login
 │   │   └── sign-up/            # Account registration
 │   ├── api/                    # Server-side route handlers
-│   │   ├── ai/                 # AI generation & inline editing stream
+│   │   ├── ai/                 # Multi-model streaming generation & inline edits
 │   │   ├── billing/            # Stripe checkout, portal, webhook
 │   │   ├── projects/           # Project CRUD & persistence
 │   │   └── shopify/sections/   # Liquid conversion & export APIs
@@ -104,15 +118,20 @@
 │   ├── layout.tsx              # Root layout & providers
 │   └── page.tsx                # High-converting landing page
 ├── components/
-│   ├── billing/                # Subscription cards & billing UI
-│   ├── editor/                 # Builder canvas, iframe preview, toolbar, chat
+│   ├── billing/                # Subscription cards & upgrade modals
+│   ├── editor/                 # Builder canvas, iframe preview, model picker, toolbar, chat
 │   ├── landing/                # Landing page sections (Hero, FAQ, Showcase)
+│   ├── projects/               # Project management & delete confirmation dialogs
 │   └── ui/                     # Reusable design tokens and UI controls
 ├── lib/
-│   ├── ai/                     # AI providers (Gemini), prompts, schemas
+│   ├── ai/                     # Multi-provider adapters (OpenAI-compatible, Gemini), models catalog
+│   ├── billing/                # Subscriptions, entitlements & Pro overrides
+│   ├── export/                 # HTML/CSS and PNG screenshot bundlers
+│   ├── images/                 # ImageKit & curated Unsplash photography pipeline
 │   ├── insforge/               # InsForge database client & repositories
 │   └── shopify/                # Liquid converters, theme bundler, ZIP generator
 ├── migrations/                 # PostgreSQL database schemas & RLS policies
+├── scripts/                    # CLI utilities (e.g. set-pro-user.ts)
 └── docs/                       # Detailed setup & architectural guides
 ```
 
@@ -123,7 +142,7 @@
 ### 1. Prerequisites
 - **Bun** (v1.0 or newer) — [Install Bun](https://bun.sh/)
 - **InsForge Project** — [InsForge Dashboard](https://insforge.dev)
-- **Google Gemini API Key** — [Google AI Studio](https://aistudio.google.com/)
+- **AI API Key** (at least one: Google Gemini, DeepSeek, OpenRouter, or OpenAI)
 - *(Optional)* **ImageKit Account** & **Stripe Account**
 
 ### 2. Clone and Install
@@ -148,20 +167,24 @@ Fill in the environment keys:
 # InsForge Backend (Required)
 NEXT_PUBLIC_INSFORGE_URL=https://your-project.insforge.app
 NEXT_PUBLIC_INSFORGE_ANON_KEY=your-publishable-anon-key
-INSFORGE_ADMIN_KEY=your-service-role-admin-key
+INSFORGE_SERVICE_ROLE_KEY=your-service-role-admin-key
 
-# AI Provider (Required)
-AI_PROVIDER=gemini
-AI_MODEL=gemini-2.0-flash
+# AI Provider Keys (Configure at least one, or enter via UI)
 GEMINI_API_KEY=your-gemini-api-key
+DEEPSEEK_API_KEY=your-deepseek-api-key
+OPENROUTER_API_KEY=your-openrouter-api-key
+OPENAI_API_KEY=your-openai-api-key
 
 # App URL
 NEXT_PUBLIC_APP_URL=http://localhost:3231
 
-# ImageKit (Optional for optimized assets)
+# Developer Pro Mode (Optional: grant Pro features without Stripe)
+NEXT_PUBLIC_ENABLE_FREE_PRO=true
+
+# ImageKit (Optional: falls back to high-res Unsplash automatically)
 NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/your_id
 
-# Stripe Billing (Optional for subscription monetization)
+# Stripe Billing (Optional for live payments)
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 ```
@@ -176,49 +199,25 @@ bun run db:migrate
 
 *For manual setup via the SQL Editor, execute [`migrations/schema.sql`](./migrations/schema.sql).*
 
-### 5. Run Local Development Server
+### 5. Upgrade User to Pro (Optional / Dev)
+
+To grant Pro plan entitlements directly in your database:
+
+```bash
+# Upgrade by email:
+bun run make-pro your-email@example.com
+
+# Or upgrade all existing users:
+bun run make-pro all
+```
+
+### 6. Run Local Development Server
 
 ```bash
 bun run dev
 ```
 
 Open [http://localhost:3231](http://localhost:3231) in your browser.
-
----
-
-## 📦 Exported Shopify Theme Structure
-
-When downloading a generated theme, ShopStudio produces a production-ready OS 2.0 theme ZIP:
-
-```text
-my-theme.zip
-├── assets/
-│   ├── tailwind.css            # Scoped Tailwind CSS
-│   └── theme.css               # Global theme styles & typography tokens
-├── config/
-│   ├── settings_data.json      # Active theme settings & block configs
-│   └── settings_schema.json    # Shopify Theme Customizer schema
-├── layout/
-│   └── theme.liquid            # Main store layout
-├── locales/
-│   └── en.default.json         # Translation & default strings
-├── sections/
-│   ├── header.liquid           # Dynamic store header
-│   ├── footer.liquid           # Store footer
-│   ├── hero-banner.liquid      # Customizable hero section
-│   ├── featured-products.liquid# Product grid with blocks
-│   └── ...                     # Custom generated sections
-├── snippets/
-│   ├── card-product.liquid     # Product card component
-│   ├── card-collection.liquid  # Collection card component
-│   ├── price.liquid            # Currency & price formatter
-│   └── meta-tags.liquid        # OpenGraph & SEO tags
-└── templates/
-    ├── index.json              # Homepage section hierarchy
-    ├── product.json            # Product detail layout
-    ├── collection.json         # Collection catalog layout
-    └── cart.json               # Shopping cart page
-```
 
 ---
 
@@ -230,6 +229,9 @@ bun run dev
 
 # Run static typecheck & ESLint
 bun run lint
+
+# Upgrade a user account to Pro (Yearly) directly in database
+bun run make-pro <user_email_or_uuid>
 
 # Build production bundle
 bun run build
