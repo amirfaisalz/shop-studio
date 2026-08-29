@@ -288,9 +288,9 @@ export default function EditorPreview() {
         </div>
 
         {/* Browser toolbar / address bar */}
-        <div className="flex items-center gap-3 border-b border-neutral-200/80 bg-white px-3.5 py-2">
+        <div className="flex items-center gap-2 sm:gap-3 border-b border-neutral-200/80 bg-white px-3.5 py-2">
           {/* macOS window indicator dots */}
-          <div className="flex items-center gap-1.5">
+          <div className="hidden sm:flex items-center gap-1.5 shrink-0">
             <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F56] ring-1 ring-black/5" />
             <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E] ring-1 ring-black/5" />
             <span className="h-2.5 w-2.5 rounded-full bg-[#27C93F] ring-1 ring-black/5" />
@@ -314,7 +314,7 @@ export default function EditorPreview() {
           </div>
 
           {/* Viewport switchers (Desktop / Tablet / Mobile) */}
-          <div className="flex items-center gap-1 rounded-xl border border-neutral-200/90 bg-neutral-50 p-0.5">
+          <div className="flex items-center gap-1 rounded-xl border border-neutral-200/90 bg-neutral-50 p-0.5 shrink-0">
             {VIEWPORTS.map((v) => {
               const Icon = v.icon;
               const isActive = v.id === viewport;
@@ -335,6 +335,31 @@ export default function EditorPreview() {
               );
             })}
           </div>
+
+          {/* Inline-edit toggle & Image generation status (fixed in toolbar, never blocking viewport) */}
+          {activePage && activeHtml && (
+            <div className="flex items-center gap-2 shrink-0">
+              {isImageGenerating && (
+                <div className="hidden lg:flex items-center gap-1.5 rounded-xl border border-[#FFCCBC] bg-[#FFF3EE] px-2.5 py-1 text-[11px] font-bold text-[#FF3B00] shadow-2xs">
+                  <Loader2 size={12} strokeWidth={2.4} className="animate-spin text-[#FF3B00]" />
+                  <span>Generating image…</span>
+                </div>
+              )}
+              <button
+                onClick={() => setEditMode((v) => !v)}
+                aria-pressed={editMode}
+                title={editMode ? 'Finish inline editing' : 'Click elements to edit inline'}
+                className={`flex h-8 items-center gap-1.5 rounded-xl border px-3 text-xs font-bold shadow-2xs transition cursor-pointer ${
+                  editMode
+                    ? 'border-transparent bg-[#FF3B00] text-white hover:bg-[#E03E00] shadow-[0_2px_10px_rgba(255,59,0,0.3)]'
+                    : 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 hover:text-neutral-950 hover:border-neutral-300'
+                }`}
+              >
+                {editMode ? <Check size={14} strokeWidth={2.4} /> : <Pencil size={13} strokeWidth={2} />}
+                <span>{editMode ? 'Done' : 'Edit Elements'}</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Canvas Area */}
@@ -343,30 +368,6 @@ export default function EditorPreview() {
             className="relative mx-auto h-full min-h-full overflow-hidden rounded-xl border border-neutral-200/90 bg-white shadow-2xs transition-[max-width] duration-300"
             style={{ maxWidth: viewportWidth }}
           >
-            {/* Inline-edit toggle — top-right of the preview. */}
-            {activePage && activeHtml && (
-              <div className="absolute right-3 top-3 z-20 flex items-center gap-2">
-                {isImageGenerating && (
-                  <div className="flex items-center gap-1.5 rounded-xl border border-[#FFCCBC] bg-white/95 px-3 py-1.5 text-xs font-bold text-[#FF3B00] shadow-sm backdrop-blur">
-                    <Loader2 size={14} strokeWidth={2.4} className="animate-spin text-[#FF3B00]" />
-                    <span>Generating image…</span>
-                  </div>
-                )}
-                <button
-                  onClick={() => setEditMode((v) => !v)}
-                  aria-pressed={editMode}
-                  className={`flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold shadow-2xs transition cursor-pointer ${
-                    editMode
-                      ? 'border-transparent bg-[#FF3B00] text-white hover:bg-[#E03E00] shadow-[0_2px_10px_rgba(255,59,0,0.3)]'
-                      : 'border-neutral-200 bg-white/95 text-neutral-700 backdrop-blur hover:bg-white hover:text-neutral-950'
-                  }`}
-                >
-                  {editMode ? <Check size={14} strokeWidth={2.4} /> : <Pencil size={14} strokeWidth={2} />}
-                  <span>{editMode ? 'Done' : 'Edit Elements'}</span>
-                </button>
-              </div>
-            )}
-
             {activePage ? (
               <iframe
                 key={reloadKey}
