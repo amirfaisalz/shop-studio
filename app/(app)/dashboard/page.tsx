@@ -24,6 +24,8 @@ import { listProjects, createProject, ProjectLimitError, type Project } from '@/
 import { ensureProjectThumbnail } from '@/lib/thumbnail';
 import UpgradeDialog from '@/components/billing/UpgradeDialog';
 import { FREE_PROJECT_LIMIT } from '@/lib/billing/plans';
+import AIModelSelector from '@/components/editor/AIModelSelector';
+import { type AIClientConfig, DEFAULT_AI_CONFIG } from '@/lib/ai/models';
 
 const toneOptions = [
   { label: '✨ Clean Minimalist', tone: 'clean and minimalist with generous whitespace, subtle borders, and sophisticated typography' },
@@ -88,11 +90,42 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [aiConfig, setAiConfig] = useState<AIClientConfig>(DEFAULT_AI_CONFIG);
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(true);
 
   const promptInputRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        if (typeof window === 'undefined') return;
+        const saved = localStorage.getItem('shopstudio_ai_config');
+        if (saved && active) {
+          const parsed = JSON.parse(saved) as AIClientConfig;
+          if (parsed && typeof parsed === 'object') {
+            setAiConfig(parsed);
+          }
+        }
+      } catch {
+        // ignore
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const handleAiConfigChange = (newConfig: AIClientConfig) => {
+    setAiConfig(newConfig);
+    try {
+      localStorage.setItem('shopstudio_ai_config', JSON.stringify(newConfig));
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     if (authLoading || !user) return;
@@ -186,6 +219,9 @@ export default function DashboardPage() {
         : raw;
 
     try {
+      try {
+        localStorage.setItem('shopstudio_ai_config', JSON.stringify(aiConfig));
+      } catch {}
       const project = await createProject(finalPrompt);
       router.push(`/editor/${project.id}`);
     } catch (err) {
@@ -324,7 +360,7 @@ export default function DashboardPage() {
 
         {/* AI Prompt Studio Studio Box */}
         <section className="mb-10 rounded-3xl border border-neutral-200/90 bg-white p-6 sm:p-8 shadow-[0_16px_40px_rgba(0,0,0,0.04)]">
-          <div className="mb-5 flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+          <div className="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <div>
               <div className="flex items-center gap-2">
                 <span className="grid h-7 w-7 place-items-center rounded-lg bg-[#FFF3EE] text-[#FF3B00]">
@@ -346,23 +382,36 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Tone Selector Chips */}
-          <div className="mb-4 flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider mr-1">Design Vibe:</span>
-            {toneOptions.map((opt) => (
-              <button
-                key={opt.label}
-                type="button"
-                onClick={() => handleSelectTone(opt)}
-                className={`rounded-full px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
-                  selectedTone === opt.tone
-                    ? 'bg-neutral-950 text-white shadow-xs'
-                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900'
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
+          {/* Tone Selector & AI Model Selector Row */}
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider mr-1">Design Vibe:</span>
+              {toneOptions.map((opt) => (
+                <button
+                  key={opt.label}
+                  type="button"
+                  onClick={() => handleSelectTone(opt)}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
+                    selectedTone === opt.tone
+                      ? 'bg-neutral-950 text-white shadow-xs'
+                      : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-900'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider hidden sm:inline">Model:</span>
+              <AIModelSelector
+                config={aiConfig}
+                onChange={handleAiConfigChange}
+                disabled={submitting}
+                placement="bottom"
+                align="right"
+              />
+            </div>
           </div>
 
           {/* Prompt Form */}

@@ -515,24 +515,33 @@ export default function EditorChatPanel() {
             disabled={isStreaming}
             className="w-full resize-none border-0 bg-transparent px-1 py-1 text-xs text-neutral-900 outline-none placeholder:text-neutral-400 disabled:opacity-60 leading-relaxed font-medium"
           />
-          <div className="flex items-center justify-between pt-1.5 border-t border-neutral-100 mt-1">
-            <div className="flex items-center gap-1.5">
-              <span className="text-[10px] font-medium text-neutral-400">
-                Press <kbd className="rounded bg-neutral-100 px-1 py-0.5 text-[10px] font-semibold text-neutral-600 border border-neutral-200">Enter</kbd> to send
-              </span>
+          <div className="flex items-center justify-between pt-2 border-t border-neutral-100 mt-1">
+            <div className="flex items-center gap-2">
+              <AIModelSelector
+                config={aiConfig}
+                onChange={setAiConfig}
+                disabled={isStreaming}
+                placement="top"
+                align="left"
+              />
             </div>
-            <button
-              aria-label="Send message"
-              onClick={() => submit()}
-              disabled={isStreaming || !draft.trim()}
-              className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-r from-[#FF3B00] to-[#FF6200] text-white shadow-[0_2px_8px_rgba(255,59,0,0.25)] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
-            >
-              {isStreaming ? (
-                <Loader2 size={14} strokeWidth={2.4} className="animate-spin" />
-              ) : (
-                <ArrowUp size={15} strokeWidth={2.4} />
-              )}
-            </button>
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:inline-block text-[10px] font-medium text-neutral-400">
+                Press <kbd className="rounded bg-neutral-100 px-1 py-0.5 text-[10px] font-semibold text-neutral-600 border border-neutral-200">Enter</kbd>
+              </span>
+              <button
+                aria-label="Send message"
+                onClick={() => submit()}
+                disabled={isStreaming || !draft.trim()}
+                className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-r from-[#FF3B00] to-[#FF6200] text-white shadow-[0_2px_8px_rgba(255,59,0,0.25)] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+              >
+                {isStreaming ? (
+                  <Loader2 size={14} strokeWidth={2.4} className="animate-spin" />
+                ) : (
+                  <ArrowUp size={15} strokeWidth={2.4} />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>

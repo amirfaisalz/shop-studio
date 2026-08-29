@@ -22,12 +22,16 @@ interface AIModelSelectorProps {
   config: AIClientConfig;
   onChange: (config: AIClientConfig) => void;
   disabled?: boolean;
+  placement?: 'top' | 'bottom';
+  align?: 'left' | 'right';
 }
 
 export default function AIModelSelector({
   config,
   onChange,
   disabled = false,
+  placement = 'bottom',
+  align = 'right',
 }: AIModelSelectorProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -74,18 +78,23 @@ export default function AIModelSelector({
     }
   };
 
+  const positionClasses =
+    placement === 'top'
+      ? `bottom-[calc(100%+6px)] ${align === 'right' ? 'right-0' : 'left-0'}`
+      : `top-[calc(100%+6px)] ${align === 'right' ? 'right-0' : 'left-0'}`;
+
   return (
     <div className="relative inline-block" ref={dropdownRef}>
       <button
         type="button"
         disabled={disabled}
         onClick={() => setDropdownOpen((open) => !open)}
-        className="flex items-center gap-1.5 rounded-xl border border-neutral-200 bg-white px-2.5 py-1 text-[11px] font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50 hover:border-neutral-300 transition disabled:opacity-60 cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl border border-neutral-200 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-neutral-700 shadow-2xs hover:bg-neutral-50 hover:border-neutral-300 transition disabled:opacity-60 cursor-pointer"
         title="Change AI Model (DeepSeek, OpenRouter, Gemini, OpenAI)"
       >
         <span className="flex items-center gap-1">
           {getProviderIcon(activeProvider)}
-          <span className="max-w-[130px] truncate">{activeModelName}</span>
+          <span className="max-w-[120px] sm:max-w-[140px] truncate">{activeModelName}</span>
         </span>
         <ChevronDown
           size={11}
@@ -95,7 +104,9 @@ export default function AIModelSelector({
       </button>
 
       {dropdownOpen && (
-        <div className="absolute left-0 bottom-[calc(100%+6px)] z-50 w-72 overflow-hidden rounded-2xl border border-neutral-200 bg-white p-1.5 shadow-[0_16px_36px_rgba(0,0,0,0.14)] animate-in fade-in-50 zoom-in-95 duration-150">
+        <div
+          className={`absolute ${positionClasses} z-50 w-72 overflow-hidden rounded-2xl border border-neutral-200 bg-white p-1.5 shadow-[0_16px_36px_rgba(0,0,0,0.14)] animate-in fade-in-50 zoom-in-95 duration-150`}
+        >
           <div className="px-2.5 py-1.5 border-b border-neutral-100 flex items-center justify-between">
             <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
               Select AI Model
