@@ -79,3 +79,38 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  const user = await getUserFromToken(bearerToken(req));
+  if (!user) {
+    return Response.json({ error: 'Unauthorized.' }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get('id');
+  if (!id) {
+    return Response.json({ error: 'Project ID is required.' }, { status: 400 });
+  }
+
+  try {
+    const { error } = await getAdminClient()
+      .database.from('projects')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', user.id);
+
+    if (error) {
+      return Response.json(
+        { error: error.message ?? 'Failed to delete project.' },
+        { status: 500 }
+      );
+    }
+
+    return Response.json({ success: true });
+  } catch (err) {
+    return Response.json(
+      { error: err instanceof Error ? err.message : 'Failed to delete project.' },
+      { status: 500 }
+    );
+  }
+}

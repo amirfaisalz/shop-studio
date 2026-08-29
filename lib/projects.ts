@@ -142,3 +142,18 @@ export async function getProject(id: string): Promise<Project | null> {
   const project = Array.isArray(data) ? data[0] : data;
   return (project as Project) ?? null;
 }
+
+/**
+ * Permanently delete a project and all associated pages, themes, and exports
+ * (cascade deleted in database). RLS guarantees the user can only delete their own project.
+ */
+export async function deleteProject(id: string): Promise<void> {
+  const { error } = await insforge.database
+    .from('projects')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    throw new Error(error.message ?? 'Failed to delete project.');
+  }
+}
