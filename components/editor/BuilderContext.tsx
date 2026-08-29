@@ -17,6 +17,7 @@ import { getProjectPages, savePage, deletePage, clearPages } from '@/lib/pages';
 import { getProjectMessages, appendMessages, clearMessages } from '@/lib/messages';
 import { getProjectTheme, saveTheme, clearTheme } from '@/lib/theme';
 import { captureAndSaveThumbnail } from '@/lib/thumbnail';
+import { AIClientConfig, DEFAULT_AI_CONFIG } from '@/lib/ai/models';
 
 /**
  * Client-side builder state: chat messages, page tabs, and the live preview,
@@ -75,6 +76,9 @@ interface BuilderContextValue {
    */
   updatePageHtml: (pageId: string, html: string) => string;
   newChat: () => void;
+  /** Active AI model & provider configuration (DeepSeek, OpenRouter, Gemini, OpenAI, etc.). */
+  aiConfig: AIClientConfig;
+  setAiConfig: (config: AIClientConfig) => void;
 }
 
 const BuilderContext = createContext<BuilderContextValue | null>(null);
@@ -163,6 +167,45 @@ export function BuilderProvider({
   const [isImageGenerating, setIsImageGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState(false);
+
+  // Active AI Model and Provider configuration (DeepSeek, OpenRouter, Gemini, OpenAI, etc.)
+  const [aiConfig, setAiConfigState] = useState<AIClientConfig>(DEFAULT_AI_CONFIG);
+  const aiConfigRef = useRef<AIClientConfig>(DEFAULT_AI_CONFIG);
+  useEffect(() => {
+    aiConfigRef.current = aiConfig;
+  }, [aiConfig]);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        if (typeof window === 'undefined') return;
+        const saved = localStorage.getItem('shopstudio_ai_config');
+        if (saved && active) {
+          const parsed = JSON.parse(saved) as AIClientConfig;
+          if (parsed && typeof parsed === 'object') {
+            setAiConfigState(parsed);
+            aiConfigRef.current = parsed;
+          }
+        }
+      } catch {
+        // ignore
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const setAiConfig = useCallback((newConfig: AIClientConfig) => {
+    setAiConfigState(newConfig);
+    aiConfigRef.current = newConfig;
+    try {
+      localStorage.setItem('shopstudio_ai_config', JSON.stringify(newConfig));
+    } catch {
+      // ignore
+    }
+  }, []);
 
   // Undo / Redo history tracking
   const historyRef = useRef<{ pages: PageState[]; activePageId: string | null }[]>([]);
@@ -436,6 +479,7 @@ export function BuilderProvider({
             // The project's shared theme (if generated). Lets the server reuse the
             // same design system and skip regenerating it.
             theme: themeRef.current,
+            aiConfig: aiConfigRef.current,
           }),
           signal: controller.signal,
         });
@@ -840,6 +884,8 @@ export function BuilderProvider({
     closePage,
     updatePageHtml,
     newChat,
+    aiConfig,
+    setAiConfig,
   };
 
   return <BuilderContext.Provider value={value}>{children}</BuilderContext.Provider>;

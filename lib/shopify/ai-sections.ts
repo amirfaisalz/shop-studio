@@ -15,6 +15,7 @@ import {
   type PageRegion,
 } from './liquid';
 import type { ExportPage } from './types';
+import type { AIClientConfig } from '@/lib/ai/models';
 
 /**
  * Client-side AI section conversion (AGENTS.md §10). Splits each designed page
@@ -45,6 +46,7 @@ export interface ConvertPagesInput {
   pages: ExportPage[];
   brandName: string;
   styleGuide?: string | null;
+  aiConfig?: AIClientConfig;
   onProgress?: (progress: AiConversionProgress) => void;
   signal?: AbortSignal;
 }
@@ -172,7 +174,12 @@ export async function convertPagesWithAI(input: ConvertPagesInput): Promise<AiCo
   const res = await fetch('/api/shopify/sections', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ brandName, styleGuide: styleGuide ?? undefined, sections: items }),
+    body: JSON.stringify({
+      brandName,
+      styleGuide: styleGuide ?? undefined,
+      sections: items,
+      aiConfig: input.aiConfig,
+    }),
     signal,
   });
   if (!res.ok || !res.body) {

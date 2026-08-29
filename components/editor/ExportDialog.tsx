@@ -23,6 +23,8 @@ import type { ExportPage, ExportProgress, ExportStepId } from '@/lib/shopify/typ
  * duplicated.
  */
 
+import type { AIClientConfig } from '@/lib/ai/models';
+
 type DialogState = 'checking' | 'existing' | 'exporting' | 'success' | 'error';
 
 interface ExportDialogProps {
@@ -33,6 +35,7 @@ interface ExportDialogProps {
   pages: ExportPage[];
   themeCss: string;
   styleGuide: string | null;
+  aiConfig?: AIClientConfig;
 }
 
 const STEP_LIST: { id: ExportStepId; label: string }[] = [
@@ -73,6 +76,7 @@ export default function ExportDialog({
   pages,
   themeCss,
   styleGuide,
+  aiConfig,
 }: ExportDialogProps) {
   const [state, setState] = useState<DialogState>('checking');
   const [existing, setExisting] = useState<ThemeExportRow | null>(null);
@@ -97,6 +101,7 @@ export default function ExportDialog({
         pages,
         themeCss,
         styleGuide,
+        aiConfig,
         onProgress: setProgress,
       });
       setResult(res);
@@ -107,7 +112,7 @@ export default function ExportDialog({
     } finally {
       runningRef.current = false;
     }
-  }, [projectId, projectName, pages, themeCss, styleGuide]);
+  }, [projectId, projectName, pages, themeCss, styleGuide, aiConfig]);
 
   // On open: reset, then check for an existing export. If one exists, offer the
   // choices; otherwise begin the export immediately.

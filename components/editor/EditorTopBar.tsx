@@ -47,6 +47,7 @@ export default function EditorTopBar({
     redo,
     canUndo,
     canRedo,
+    aiConfig,
   } = useBuilder();
   const { entitlement } = useSubscription();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -324,6 +325,7 @@ export default function EditorTopBar({
         pages={exportPages}
         themeCss={themeCss}
         styleGuide={styleGuide}
+        aiConfig={aiConfig}
       />
 
       <UpgradeDialog

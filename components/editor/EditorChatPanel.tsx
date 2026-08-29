@@ -18,6 +18,7 @@ import {
   X,
 } from 'lucide-react';
 import { useBuilder } from './BuilderContext';
+import AIModelSelector from './AIModelSelector';
 
 interface QuickSuggestion {
   id: string;
@@ -148,6 +149,8 @@ export default function EditorChatPanel() {
     sendMessage,
     retryLast,
     newChat,
+    aiConfig,
+    setAiConfig,
   } = useBuilder();
 
   const [draft, setDraft] = useState('');
@@ -251,6 +254,7 @@ export default function EditorChatPanel() {
               Generating
             </span>
           )}
+          <AIModelSelector config={aiConfig} onChange={setAiConfig} disabled={isStreaming} />
           <button
             aria-label="New prompt"
             onClick={handleNewChat}
